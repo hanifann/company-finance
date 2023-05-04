@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.ebt.finance.features.login.presentation.LoginScreen
+import com.ebt.finance.features.login.presentation.screen.LoginScreen
 import com.ebt.finance.ui.theme.FinanceTheme
 import com.ebt.finance.ui.theme.Primary
 import dagger.hilt.android.AndroidEntryPoint
