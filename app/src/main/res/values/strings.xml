@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Finance</string>
     <string name="TOKEN_KEY">TOKEN_KEY</string>
+    <string name="USER_DATA_KEY">USER_DATA_KEY</string>
 </resources>

@@ -7,4 +7,6 @@ interface DataStoreRepository{
     fun getData(key: Preferences.Key<String>): Flow<String>
 
     suspend fun saveData(data: String, key: Preferences.Key<String>)
+
+    suspend fun clearData()
 }

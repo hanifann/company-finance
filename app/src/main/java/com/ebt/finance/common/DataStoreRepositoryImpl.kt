@@ -27,4 +27,10 @@ class DataStoreRepositoryImpl @Inject constructor(
             it[key] = data
         }
     }
+
+    override suspend fun clearData() {
+        dataStore.edit {
+            it.clear()
+        }
+    }
 }

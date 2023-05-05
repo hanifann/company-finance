@@ -1,27 +1,41 @@
 package com.ebt.finance.features.auth.presentation.viewmodel
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.core.stringSetPreferencesKey
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ebt.finance.common.DataStoreRepository
+import com.ebt.finance.R
+import com.ebt.finance.common.Resource
+import com.ebt.finance.features.auth.domain.use_case.GetTokenUseCase
+import com.ebt.finance.features.auth.presentation.state.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val dataStore: DataStoreRepository
+    private val dataStore: GetTokenUseCase
 ): ViewModel(){
-    val token: StateFlow<String> = dataStore.getData(stringPreferencesKey("token"))
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(),
-            ""
-        )
+    private val _state = mutableStateOf(AuthState())
+    val state: State<AuthState> = _state
+
+
+    init {
+        viewModelScope.launch {
+            dataStore.invoke(R.string.TOKEN_KEY.toString())
+                .collect{
+                    when(it) {
+                        is Resource.Success -> {
+                            _state.value = AuthState(data = it.data.toString(), isSuccess = true, isLoading = false)
+                        }
+                        is Resource.Loading -> {
+
+                        }
+                        is Resource.Error -> {
+                            _state.value = AuthState(isSuccess = false, isLoading = false)
+                        }
+                    }
+                }
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.ebt.finance.features.login.presentation.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.AlertDialog
@@ -20,7 +23,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,16 +40,17 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ebt.finance.R
-import com.ebt.finance.common.DataStoreRepositoryImpl
 import com.ebt.finance.features.login.presentation.component.LoginTextFieldComponent
 import com.ebt.finance.features.login.presentation.viewmodel.LoginViewModel
+import com.ebt.finance.features.login.presentation.viewmodel.UserDataViewModel
 import com.ebt.finance.ui.theme.Accent
 import com.ebt.finance.ui.theme.Secondary
 
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel(),
+    userViewModel: UserDataViewModel = hiltViewModel()
 ) {
     val emailInteractionSource = remember { MutableInteractionSource() }
     val passwordInteractionSource = remember { MutableInteractionSource() }
@@ -55,60 +63,19 @@ fun LoginScreen(
     }
 
     var showDialog by remember { mutableStateOf(false) }
+    var userDialog by remember { mutableStateOf(false) }
+
+    var isVisible by remember { mutableStateOf(true) }
 
     val state = viewModel.state.value
-    if(state.isLoading) {
-        AlertDialog(
-            onDismissRequest = {
 
-            },
-            text = {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    CircularProgressIndicator()
-                    Spacer(modifier = Modifier.padding(vertical = 12.dp))
-                    Text(
-                        text = "Loading...",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight(500),
-                        color = Secondary
-                    )
-                }
-            },
-            confirmButton = {
-                showDialog = false
-            }
-        )
-    }
-    if(state.error.isNotBlank()){
-        AlertDialog(
-            onDismissRequest = {
-
-            },
-            title = {
-                Text(text = "Error")
-            },
-            text = {
-                Text(text = state.error)
-            },
-            confirmButton = {
-                showDialog = false
-            }
-        )
-    }
-
-    if (!state.data?.data.isNullOrBlank()){
-        navController.navigate("auth_screen")
-    }
+    val userState = userViewModel.state.value
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .verticalScroll(state = rememberScrollState())
     ) {
         Spacer(
             modifier = Modifier
@@ -182,6 +149,11 @@ fun LoginScreen(
                 textFieldValue = passwordTextFieldValue,
                 onValueChange = {
                     passwordTextFieldValue = it
+                },
+                isWithTrailingIcon = true,
+                isVisible = isVisible,
+                onIconTap = {
+                    isVisible = !isVisible
                 }
             )
         }
@@ -212,4 +184,98 @@ fun LoginScreen(
             )
         }
     }
+
+    if(state.isLoading) {
+        AlertDialog(
+            onDismissRequest = {
+
+            },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    CircularProgressIndicator()
+                    Spacer(modifier = Modifier.padding(vertical = 12.dp))
+                    Text(
+                        text = "Loading...",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight(500),
+                        color = Secondary
+                    )
+                }
+            },
+            confirmButton = {
+                showDialog = false
+            }
+        )
+    }
+    if(state.error.isNotBlank()){
+        showDialog = true
+
+    }
+    
+    if(showDialog){
+        AlertDialog(
+            onDismissRequest = {
+
+            },
+            title = {
+                Text(text = "Error")
+            },
+            text = {
+                Text(text = state.error)
+            },
+            confirmButton = {
+                Text(
+                    text = "Kembali",
+                    modifier = Modifier
+                        .clickable {
+                            showDialog = false
+                            state.error = ""
+                        }
+                )
+            }
+        )
+    }
+
+    if (!state.data?.data.isNullOrBlank()){
+        userViewModel.getUserData("Bearer ${state.data!!.data}")
+        "".also { state.data.data = it }
+    }
+
+    if (!userState.data?.name.isNullOrBlank()){
+        navController.navigate("auth_screen")
+    }
+
+    if(userState.error.isNotBlank()){
+        userDialog = true
+    }
+
+    if(userDialog){
+        AlertDialog(
+            onDismissRequest = {
+
+            },
+            title = {
+                Text(text = "Error")
+            },
+            text = {
+                Text(text = userState.error)
+            },
+            confirmButton = {
+                Text(
+                    text = "Kembali",
+                    modifier = Modifier
+                        .clickable {
+                            userDialog = false
+                            userState.error = ""
+                        }
+                )
+            }
+        )
+    }
+
 }

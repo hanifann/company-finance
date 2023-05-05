@@ -1,8 +1,6 @@
 package com.ebt.finance.features.login.domain.use_case
 
 import android.util.Log
-import androidx.datastore.preferences.core.stringPreferencesKey
-import com.ebt.finance.common.DataStoreRepository
 import com.ebt.finance.common.Resource
 import com.ebt.finance.common.toFailed
 import com.ebt.finance.features.login.data.dto.toLoginData

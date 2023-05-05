@@ -14,10 +14,12 @@ import com.ebt.finance.common.DataStoreRepositoryImpl
 import com.ebt.finance.features.login.data.datasources.LoginRemoteDataSource
 import com.ebt.finance.features.login.data.repositories.LoginRepositoryImp
 import com.ebt.finance.features.login.domain.repositories.LoginRepository
+import com.google.gson.Gson
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
@@ -55,14 +57,8 @@ object AppModule {
             corruptionHandler = ReplaceFileCorruptionHandler(
                 produceNewData = { emptyPreferences() }
             ),
-            produceFile = {context.preferencesDataStoreFile("company_data")}
+            produceFile = { context.preferencesDataStoreFile("company_data") }
         )
-    }
-
-    @Provides
-    @Singleton
-    fun provideAsd(dataStore: DataStore<Preferences>): DataStoreRepository {
-        return DataStoreRepositoryImpl(dataStore)
     }
 
     @Provides
@@ -70,4 +66,16 @@ object AppModule {
     fun provideLoginRepository(remoteDataSource: LoginRemoteDataSource): LoginRepository {
         return LoginRepositoryImp(remoteDataSource)
     }
+
+    @get:Provides
+    @Singleton
+    val gson: Gson = Gson()
+}
+
+@InstallIn(ViewModelComponent::class)
+@Module
+abstract class UserPreferenceModule {
+
+    @Binds
+    abstract fun bindUserPreferences(impl: DataStoreRepositoryImpl): DataStoreRepository
 }

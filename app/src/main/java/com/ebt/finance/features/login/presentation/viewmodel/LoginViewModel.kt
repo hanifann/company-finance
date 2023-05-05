@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ebt.finance.R
 import com.ebt.finance.common.DataStoreRepository
 import com.ebt.finance.common.Resource
 import com.ebt.finance.features.login.domain.use_case.PostLoginUseCase
@@ -39,6 +40,7 @@ class LoginViewModel @Inject constructor(
                         }
                         is Resource.Loading -> {
                             _state.value = LoginState(true)
+                            clearData()
                         }
                     }
                 }
@@ -47,7 +49,13 @@ class LoginViewModel @Inject constructor(
 
     private fun saveToken(token: String) {
         viewModelScope.launch {
-            dataStore.saveData(token, stringPreferencesKey("token"))
+            dataStore.saveData(token, stringPreferencesKey(R.string.TOKEN_KEY.toString()))
+        }
+    }
+
+    private fun clearData() {
+        viewModelScope.launch {
+            dataStore.clearData()
         }
     }
 }
