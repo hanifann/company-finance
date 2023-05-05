@@ -26,20 +26,18 @@ import com.ebt.finance.ui.theme.Secondary
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginTextFieldComponent(
+    textFieldValue: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
     interactionSource: InteractionSource,
     placeholder: String,
     keyboardType: KeyboardType,
     isWithTrailingIcon: Boolean = false,
 
 ) {
-    var textFieldValue by remember {
-        mutableStateOf(TextFieldValue(""))
-    }
+
     BasicTextField(
         value = textFieldValue,
-        onValueChange = {
-            textFieldValue = it
-        },
+        onValueChange,
         modifier = Modifier
             .fillMaxWidth(),
         textStyle = TextStyle(

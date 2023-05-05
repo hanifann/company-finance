@@ -9,6 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ebt.finance.features.admin.presentation.HomeAdmin
+import com.ebt.finance.features.auth.presentation.screens.AuthScreen
 import com.ebt.finance.features.login.presentation.screen.LoginScreen
 import com.ebt.finance.ui.theme.FinanceTheme
 import com.ebt.finance.ui.theme.Primary
@@ -28,12 +30,22 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Route.LoginScren.route,
+                        startDestination = Route.AuthScreen.route,
                     ) {
                         composable(
                             route = Route.LoginScren.route
                         ) {
                             LoginScreen(navController = navController)
+                        }
+                        composable(
+                            route = Route.AuthScreen.route
+                        ){
+                            AuthScreen(navController = navController)
+                        }
+                        composable(
+                            route = Route.HomeAdminScreen.route
+                        ){
+                            HomeAdmin(navController = navController)
                         }
                     }
                 }
