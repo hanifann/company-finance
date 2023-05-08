@@ -1,4 +1,4 @@
-package com.ebt.finance.features.admin.presentation.viewModel
+package com.ebt.finance.features.admin.home.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,9 +9,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeAdminViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
 ): ViewModel() {
-
     fun logOut() {
         viewModelScope.launch {
             dataStoreRepository.clearData()

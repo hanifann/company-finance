@@ -9,7 +9,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.ebt.finance.features.admin.presentation.screen.HomeAdmin
+import com.ebt.finance.features.admin.home.presentation.screen.HomeAdmin
+import com.ebt.finance.features.admin.pemasukan_detail.presentation.screen.PemasukanDetailScreen
 import com.ebt.finance.features.auth.presentation.screens.AuthScreen
 import com.ebt.finance.features.login.presentation.screen.LoginScreen
 import com.ebt.finance.ui.theme.FinanceTheme
@@ -54,6 +55,11 @@ class MainActivity : ComponentActivity() {
                             route = Route.HomeAdminScreen.route
                         ){
                             HomeAdmin(navController = navController)
+                        }
+                        composable(
+                            route = Route.PemasukanDetailScreen.route + "/{incomeId}"
+                        ) {
+                            PemasukanDetailScreen()
                         }
                     }
                 }

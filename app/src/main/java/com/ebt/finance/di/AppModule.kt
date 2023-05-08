@@ -11,6 +11,12 @@ import arrow.retrofit.adapter.either.EitherCallAdapterFactory
 import com.ebt.finance.common.Constant
 import com.ebt.finance.common.DataStoreRepository
 import com.ebt.finance.common.DataStoreRepositoryImpl
+import com.ebt.finance.features.admin.pemasukan.data.datasources.PemasukanRemoteDataSource
+import com.ebt.finance.features.admin.pemasukan.data.repositories.PemasukanRepositoryImpl
+import com.ebt.finance.features.admin.pemasukan.domain.repositories.PemasukanRepository
+import com.ebt.finance.features.admin.pemasukan_detail.data.data_source.PemasukanDetailRemoteDataSource
+import com.ebt.finance.features.admin.pemasukan_detail.data.repositories.PemasukanDetailRepositoryImpl
+import com.ebt.finance.features.admin.pemasukan_detail.domain.repositories.PemasukanDetailRepository
 import com.ebt.finance.features.login.data.datasources.LoginRemoteDataSource
 import com.ebt.finance.features.login.data.repositories.LoginRepositoryImp
 import com.ebt.finance.features.login.domain.repositories.LoginRepository
@@ -26,6 +32,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.NumberFormat
 import javax.inject.Singleton
 
 
@@ -33,6 +40,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    //login
+    //datasource
     @Provides
     @Singleton
     fun provideLoginRemoteDataSourc(): LoginRemoteDataSource {
@@ -49,7 +58,68 @@ object AppModule {
             .build()
             .create(LoginRemoteDataSource::class.java)
     }
+    //repository
+    @Provides
+    @Singleton
+    fun provideLoginRepository(remoteDataSource: LoginRemoteDataSource): LoginRepository {
+        return LoginRepositoryImp(remoteDataSource)
+    }
 
+
+    //admin
+    //datasource
+    @Provides
+    @Singleton
+    fun providePemasukanRemoteDataSource(): PemasukanRemoteDataSource {
+        return Retrofit.Builder()
+            .baseUrl(Constant.BASE_URL)
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }).build()
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(EitherCallAdapterFactory.create())
+            .build()
+            .create(PemasukanRemoteDataSource::class.java)
+    }
+    //repository
+    @Provides
+    @Singleton
+    fun providePemasukanRepository(remoteDataSource: PemasukanRemoteDataSource): PemasukanRepository {
+        return PemasukanRepositoryImpl(remoteDataSource)
+    }
+
+    //detail_pemasukan
+    //datasource
+    @Provides
+    @Singleton
+    fun providePemasukanDetailDataSource(): PemasukanDetailRemoteDataSource {
+        return Retrofit.Builder()
+            .baseUrl(Constant.BASE_URL)
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }).build()
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(EitherCallAdapterFactory.create())
+            .build()
+            .create(PemasukanDetailRemoteDataSource::class.java)
+    }
+    //repository
+    @Provides
+    @Singleton
+    fun providePemasukanDetailRepository(remoteDataSource: PemasukanDetailRemoteDataSource): PemasukanDetailRepository {
+        return PemasukanDetailRepositoryImpl(remoteDataSource)
+    }
+
+
+
+    //core
+    //datastore
     @Provides
     @Singleton
     fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
@@ -60,16 +130,14 @@ object AppModule {
             produceFile = { context.preferencesDataStoreFile("company_data") }
         )
     }
-
-    @Provides
-    @Singleton
-    fun provideLoginRepository(remoteDataSource: LoginRemoteDataSource): LoginRepository {
-        return LoginRepositoryImp(remoteDataSource)
-    }
-
+    //gson
     @get:Provides
     @Singleton
     val gson: Gson = Gson()
+    //currency
+    @get:Provides
+    @Singleton
+    val format: NumberFormat = NumberFormat.getCurrencyInstance()
 }
 
 @InstallIn(ViewModelComponent::class)
