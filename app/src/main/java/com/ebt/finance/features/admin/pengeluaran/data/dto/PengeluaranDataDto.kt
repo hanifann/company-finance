@@ -8,7 +8,7 @@ data class PengeluaranDataDto(
     @SerializedName("id")
     val id: String,
     @SerializedName("jenis_pengeluaran")
-    val jenisPengeluaran: String,
+    val jenisPengeluaran: String?,
     @SerializedName("jenis_pengeluaran_id")
     val jenisPengeluaranId: String,
     @SerializedName("keterangan")
@@ -27,7 +27,7 @@ data class PengeluaranDataDto(
 
 fun PengeluaranDataDto.toPengeluaranData(): PengeluaranData = PengeluaranData(
     id,
-    jenisPengeluaran,
+    jenisPengeluaran ?: "",
     jenisPengeluaranId,
     keterangan,
     totalPengeluaran,
