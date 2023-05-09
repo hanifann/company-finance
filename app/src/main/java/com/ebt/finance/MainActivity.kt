@@ -11,14 +11,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.ebt.finance.features.admin.home.presentation.screen.HomeAdmin
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.screen.PemasukanDetailScreen
+import com.ebt.finance.features.admin.pengeluaran_detail.presentation.screen.PengeluaranDetailScreen
 import com.ebt.finance.features.auth.presentation.screens.AuthScreen
 import com.ebt.finance.features.login.presentation.screen.LoginScreen
 import com.ebt.finance.ui.theme.FinanceTheme
 import com.ebt.finance.ui.theme.Primary
 import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
-import com.google.accompanist.navigation.animation.composable
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -60,6 +61,11 @@ class MainActivity : ComponentActivity() {
                             route = Route.PemasukanDetailScreen.route + "/{incomeId}/{distributor}"
                         ) {
                             PemasukanDetailScreen(navController = navController)
+                        }
+                        composable(
+                            route = Route.PengeluaranDetailScreen.route + "/{expanseId}/{jenisPengeluaran}"
+                        ) {
+                            PengeluaranDetailScreen(navController = navController)
                         }
                     }
                 }

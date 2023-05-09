@@ -20,6 +20,9 @@ import com.ebt.finance.features.admin.pemasukan_detail.domain.repositories.Pemas
 import com.ebt.finance.features.admin.pengeluaran.data.datasources.PengeluaranRemoteDataSource
 import com.ebt.finance.features.admin.pengeluaran.data.repositories.PengeluaranRepositoryImpl
 import com.ebt.finance.features.admin.pengeluaran.domain.repositories.PengeluaranRepository
+import com.ebt.finance.features.admin.pengeluaran_detail.data.datasources.PengeluaranDetailRemoteDataSource
+import com.ebt.finance.features.admin.pengeluaran_detail.data.repositories.PengeluaranDetailRepositoryImpl
+import com.ebt.finance.features.admin.pengeluaran_detail.domain.repositories.PengeluaranDetailRepository
 import com.ebt.finance.features.login.data.datasources.LoginRemoteDataSource
 import com.ebt.finance.features.login.data.repositories.LoginRepositoryImp
 import com.ebt.finance.features.login.domain.repositories.LoginRepository
@@ -142,6 +145,31 @@ object AppModule {
     @Singleton
     fun providePengeluaranRepository(remoteDataSource: PengeluaranRemoteDataSource): PengeluaranRepository {
         return PengeluaranRepositoryImpl(remoteDataSource)
+    }
+
+    //detail_pengeluaran
+    //datasource
+    @Provides
+    @Singleton
+    fun providePengeluaranDetailRemoteDataSource(): PengeluaranDetailRemoteDataSource {
+        return Retrofit.Builder()
+            .baseUrl(Constant.BASE_URL)
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }).build()
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(EitherCallAdapterFactory.create())
+            .build()
+            .create(PengeluaranDetailRemoteDataSource::class.java)
+    }
+    //rpository
+    @Provides
+    @Singleton
+    fun providePengeluaranDetailRepostiroy(remoteDataSource: PengeluaranDetailRemoteDataSource): PengeluaranDetailRepository {
+        return PengeluaranDetailRepositoryImpl(remoteDataSource)
     }
 
 
