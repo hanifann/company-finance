@@ -47,7 +47,7 @@ fun PengeluaranScreen(
                 date = state.data.data[it].tgl,
                 icon =  R.drawable.baseline_arrow_upward_24,
                 onTap = {
-
+                    navController.navigate("expanse_detail/${state.data.data[it].id}/${state.data.data[it].jenisPengeluaran}")
                 }
             )
             Spacer(modifier = Modifier.padding(vertical = 6.dp))
