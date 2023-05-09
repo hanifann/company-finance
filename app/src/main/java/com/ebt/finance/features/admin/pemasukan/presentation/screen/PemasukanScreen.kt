@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.ebt.finance.R
 import com.ebt.finance.features.admin.pemasukan.presentation.components.ContainerPemasukanComponent
 import com.ebt.finance.features.admin.pemasukan.presentation.viewmodel.PemasukanViewModel
 import com.ebt.finance.ui.theme.Accent
@@ -42,6 +43,7 @@ fun PemasukanScreen(
                 subtitle = state.data.data[it].keterangan,
                 untung = viewModel.formatCurrenty(state.data.data[it].totalPemasukan.toDouble()),
                 date = state.data.data[it].tgl,
+                icon =  R.drawable.baseline_arrow_downward_24,
                 onTap = {
                     navController.navigate("income_detail/${state.data.data[it].id}/${state.data.data[it].namaDistributor}")
                 }

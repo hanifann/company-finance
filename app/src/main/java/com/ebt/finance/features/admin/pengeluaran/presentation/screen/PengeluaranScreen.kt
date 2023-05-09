@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.ebt.finance.R
 import com.ebt.finance.features.admin.pemasukan.presentation.components.ContainerPemasukanComponent
 import com.ebt.finance.features.admin.pengeluaran.presentation.viewmodel.PengeluaranViewModel
 import com.ebt.finance.ui.theme.Accent
@@ -44,6 +45,7 @@ fun PengeluaranScreen(
                 subtitle = state.data.data[it].keterangan,
                 untung = viewModel.formatCurrenty(state.data.data[it].totalPengeluaran.toDouble()),
                 date = state.data.data[it].tgl,
+                icon =  R.drawable.baseline_arrow_upward_24,
                 onTap = {
 
                 }

@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,6 +38,7 @@ fun ContainerPemasukanComponent(
     subtitle: String,
     untung: String,
     date: String,
+    icon: Int,
     onTap: ()-> Unit
 ) {
     Box(
@@ -70,7 +72,7 @@ fun ContainerPemasukanComponent(
                 content = {
                     Icon(
                         painter = painterResource(
-                            id = R.drawable.baseline_arrow_downward_24
+                            id = icon
                         ),
                         contentDescription = "untung",
                         tint = Color.White
@@ -107,6 +109,7 @@ fun ContainerPemasukanComponent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(.4f),
+                horizontalAlignment = Alignment.End
             ) {
                 Text(
                     text = untung,
@@ -114,7 +117,8 @@ fun ContainerPemasukanComponent(
                     fontWeight = FontWeight(500),
                     fontSize = 16.sp,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
+                    maxLines = 1,
+                    textAlign = TextAlign.End
                 )
                 Spacer(modifier = Modifier.padding(vertical = 2.dp))
                 SimpleDateFormat("yyyy-MM-dd", Locale("id")).parse(date)?.let {
@@ -123,6 +127,7 @@ fun ContainerPemasukanComponent(
                         color = Subtitle,
                         fontWeight = FontWeight(400),
                         fontSize = 14.sp,
+                        textAlign = TextAlign.End
                     )
                 }
             }
