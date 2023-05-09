@@ -25,6 +25,7 @@ import com.ebt.finance.R
 import com.ebt.finance.ui.theme.Accent
 import com.ebt.finance.ui.theme.Primary
 import com.ebt.finance.ui.theme.Secondary
+import com.ebt.finance.ui.theme.Subtitle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,7 +84,8 @@ fun LoginTextFieldComponent(
             ),
             placeholder = {
                 Text(
-                    text = placeholder
+                    text = placeholder,
+                    color = Subtitle
                 )
             },
             trailingIcon = {

@@ -16,7 +16,9 @@ data class PemasukanDataDto(
     @SerializedName("total_pemasukan")
     val totalPemasukan: String?,
     @SerializedName("bukti_pemasukan")
-    val buktiPemasukan: String?
+    val buktiPemasukan: String?,
+    @SerializedName("updated_at")
+    val updatedAt: String?
 )
 
 fun PemasukanDataDto.toPemasukanData(): PemasukanData = PemasukanData(
@@ -25,5 +27,6 @@ fun PemasukanDataDto.toPemasukanData(): PemasukanData = PemasukanData(
     keterangan ?: "",
     tgl ?: "",
     totalPemasukan ?: "",
-    buktiPemasukan ?: ""
+    buktiPemasukan ?: "",
+    updatedAt ?: ""
 )

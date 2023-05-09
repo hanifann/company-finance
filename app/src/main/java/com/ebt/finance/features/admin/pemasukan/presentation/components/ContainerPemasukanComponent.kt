@@ -1,7 +1,8 @@
 package com.ebt.finance.features.admin.pemasukan.presentation.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +30,7 @@ import com.ebt.finance.ui.theme.Subtitle
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ContainerPemasukanComponent(
     title: String,
@@ -39,7 +41,7 @@ fun ContainerPemasukanComponent(
 ) {
     Box(
         modifier = Modifier
-            .clickable(
+            .combinedClickable(
                 onClick = onTap
             )
             .fillMaxWidth()
@@ -117,7 +119,7 @@ fun ContainerPemasukanComponent(
                 Spacer(modifier = Modifier.padding(vertical = 2.dp))
                 SimpleDateFormat("yyyy-MM-dd", Locale("id")).parse(date)?.let {
                     Text(
-                        text = SimpleDateFormat("dd-MMM-yyyy", Locale("id")).format(it),
+                        text = SimpleDateFormat("dd MMMM yyyy", Locale("id")).format(it),
                         color = Subtitle,
                         fontWeight = FontWeight(400),
                         fontSize = 14.sp,

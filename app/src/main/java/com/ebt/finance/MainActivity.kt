@@ -57,9 +57,9 @@ class MainActivity : ComponentActivity() {
                             HomeAdmin(navController = navController)
                         }
                         composable(
-                            route = Route.PemasukanDetailScreen.route + "/{incomeId}"
+                            route = Route.PemasukanDetailScreen.route + "/{incomeId}/{distributor}"
                         ) {
-                            PemasukanDetailScreen()
+                            PemasukanDetailScreen(navController = navController)
                         }
                     }
                 }

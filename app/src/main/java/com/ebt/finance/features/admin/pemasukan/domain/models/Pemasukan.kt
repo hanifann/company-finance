@@ -10,7 +10,8 @@ data class PemasukanData (
     val keterangan: String,
     val tgl: String,
     val totalPemasukan: String,
-    val buktiPemasukan: String
+    val buktiPemasukan: String,
+    val updatedAt: String
 )
 
 

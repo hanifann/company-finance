@@ -180,7 +180,8 @@ fun LoginScreen(
             Text(
                 text = "Masuk",
                 fontSize = 18.sp,
-                fontWeight = FontWeight(500)
+                fontWeight = FontWeight(500),
+                color = Color.White
             )
         }
     }

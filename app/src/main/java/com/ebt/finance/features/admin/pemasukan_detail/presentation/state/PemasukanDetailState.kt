@@ -1,10 +1,10 @@
 package com.ebt.finance.features.admin.pemasukan_detail.presentation.state
 
-import com.ebt.finance.features.admin.pemasukan.domain.models.PemasukanData
+import com.ebt.finance.features.admin.pemasukan.domain.models.Pemasukan
 
 data class PemasukanDetailState(
     val isLoading: Boolean = false,
-    val data: PemasukanData = PemasukanData("", "", "", "", "", ""),
+    val data: Pemasukan = Pemasukan(emptyList()),
     val id: String = "",
-    val error: String = ""
+    val error: String = "",
 )

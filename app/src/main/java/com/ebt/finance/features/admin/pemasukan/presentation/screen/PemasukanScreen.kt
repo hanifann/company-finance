@@ -43,7 +43,7 @@ fun PemasukanScreen(
                 untung = viewModel.formatCurrenty(state.data.data[it].totalPemasukan.toDouble()),
                 date = state.data.data[it].tgl,
                 onTap = {
-                    navController.navigate("income_detail/${state.data.data[it].id}")
+                    navController.navigate("income_detail/${state.data.data[it].id}/${state.data.data[it].namaDistributor}")
                 }
             )
             Spacer(modifier = Modifier.padding(vertical = 6.dp))
