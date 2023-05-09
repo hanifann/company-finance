@@ -17,6 +17,9 @@ import com.ebt.finance.features.admin.pemasukan.domain.repositories.PemasukanRep
 import com.ebt.finance.features.admin.pemasukan_detail.data.data_source.PemasukanDetailRemoteDataSource
 import com.ebt.finance.features.admin.pemasukan_detail.data.repositories.PemasukanDetailRepositoryImpl
 import com.ebt.finance.features.admin.pemasukan_detail.domain.repositories.PemasukanDetailRepository
+import com.ebt.finance.features.admin.pengeluaran.data.datasources.PengeluaranRemoteDataSource
+import com.ebt.finance.features.admin.pengeluaran.data.repositories.PengeluaranRepositoryImpl
+import com.ebt.finance.features.admin.pengeluaran.domain.repositories.PengeluaranRepository
 import com.ebt.finance.features.login.data.datasources.LoginRemoteDataSource
 import com.ebt.finance.features.login.data.repositories.LoginRepositoryImp
 import com.ebt.finance.features.login.domain.repositories.LoginRepository
@@ -114,6 +117,31 @@ object AppModule {
     @Singleton
     fun providePemasukanDetailRepository(remoteDataSource: PemasukanDetailRemoteDataSource): PemasukanDetailRepository {
         return PemasukanDetailRepositoryImpl(remoteDataSource)
+    }
+
+    //pengeluaran
+    //datasource
+    @Provides
+    @Singleton
+    fun providePengeluaranRemoteDataSource(): PengeluaranRemoteDataSource {
+        return Retrofit.Builder()
+            .baseUrl(Constant.BASE_URL)
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }).build()
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(EitherCallAdapterFactory.create())
+            .build()
+            .create(PengeluaranRemoteDataSource::class.java)
+    }
+    //repository
+    @Provides
+    @Singleton
+    fun providePengeluaranRepository(remoteDataSource: PengeluaranRemoteDataSource): PengeluaranRepository {
+        return PengeluaranRepositoryImpl(remoteDataSource)
     }
 
 
