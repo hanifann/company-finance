@@ -9,10 +9,12 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.ebt.finance.common.Constant
 import com.ebt.finance.features.admin.home.presentation.screen.HomeAdmin
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.screen.PemasukanDetailScreen
 import com.ebt.finance.features.admin.pengeluaran_detail.presentation.screen.PengeluaranDetailScreen
 import com.ebt.finance.features.auth.presentation.screens.AuthScreen
+import com.ebt.finance.features.image_viewer.presentation.screens.ImageViewerScreen
 import com.ebt.finance.features.login.presentation.screen.LoginScreen
 import com.ebt.finance.ui.theme.FinanceTheme
 import com.ebt.finance.ui.theme.Primary
@@ -66,6 +68,11 @@ class MainActivity : ComponentActivity() {
                             route = Route.PengeluaranDetailScreen.route + "/{expanseId}/{jenisPengeluaran}"
                         ) {
                             PengeluaranDetailScreen(navController = navController)
+                        }
+                        composable(
+                            route = Route.ImageViewerScreen.route + "/{${Constant.PARAM_IMG_URL}}"
+                        ) {
+                            ImageViewerScreen(navController = navController)
                         }
                     }
                 }
