@@ -13,6 +13,8 @@ import com.ebt.finance.common.Resource
 import com.ebt.finance.features.admin.pemasukan_detail.domain.use_case.GetPemasukanDetailUseCase
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.state.DistributorState
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.state.PemasukanDetailState
+import com.ebt.finance.features.image_viewer.presentation.domain.ImageViewer
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
@@ -24,7 +26,8 @@ class PemasukanDetailViewModel @Inject constructor(
     private val useCase: GetPemasukanDetailUseCase,
     savedStateHandle: SavedStateHandle,
     private val dataStore: DataStoreRepository,
-    private val formatter: NumberFormat
+    private val formatter: NumberFormat,
+    private val gson: Gson
 ): ViewModel() {
 
     private val _state = mutableStateOf(PemasukanDetailState())
@@ -83,6 +86,10 @@ class PemasukanDetailViewModel @Inject constructor(
         formatter.maximumFractionDigits = 0
         formatter.currency = Currency.getInstance("IDR")
         return formatter.format(value)
+    }
+
+    fun toJson(image: ImageViewer): String {
+        return gson.toJson(image)
     }
 
 }
