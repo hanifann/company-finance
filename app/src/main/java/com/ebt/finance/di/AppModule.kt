@@ -23,6 +23,9 @@ import com.ebt.finance.features.admin.pengeluaran.domain.repositories.Pengeluara
 import com.ebt.finance.features.admin.pengeluaran_detail.data.datasources.PengeluaranDetailRemoteDataSource
 import com.ebt.finance.features.admin.pengeluaran_detail.data.repositories.PengeluaranDetailRepositoryImpl
 import com.ebt.finance.features.admin.pengeluaran_detail.domain.repositories.PengeluaranDetailRepository
+import com.ebt.finance.features.admin.tambah_data.data.datasources.TambahDataRemoteDataSource
+import com.ebt.finance.features.admin.tambah_data.data.repositories.TambahDataRepositoryImpl
+import com.ebt.finance.features.admin.tambah_data.domain.repositories.TambahDataRepository
 import com.ebt.finance.features.login.data.datasources.LoginRemoteDataSource
 import com.ebt.finance.features.login.data.repositories.LoginRepositoryImp
 import com.ebt.finance.features.login.domain.repositories.LoginRepository
@@ -170,6 +173,31 @@ object AppModule {
     @Singleton
     fun providePengeluaranDetailRepostiroy(remoteDataSource: PengeluaranDetailRemoteDataSource): PengeluaranDetailRepository {
         return PengeluaranDetailRepositoryImpl(remoteDataSource)
+    }
+
+    //tambah_pemasukan
+    //datasource
+    @Provides
+    @Singleton
+    fun provideTambahDataRemoteDataSource(): TambahDataRemoteDataSource {
+        return Retrofit.Builder()
+            .baseUrl(Constant.BASE_URL)
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }).build()
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(EitherCallAdapterFactory.create())
+            .build()
+            .create(TambahDataRemoteDataSource::class.java)
+    }
+    //repository
+    @Provides
+    @Singleton
+    fun ProvideTambahDataRespotiroy(dataSource: TambahDataRemoteDataSource): TambahDataRepository {
+        return TambahDataRepositoryImpl(dataSource)
     }
 
 
