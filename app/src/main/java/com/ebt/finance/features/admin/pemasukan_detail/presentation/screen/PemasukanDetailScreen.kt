@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
@@ -48,6 +49,7 @@ import com.ebt.finance.features.admin.pemasukan_detail.presentation.viewmodel.Pe
 import com.ebt.finance.features.image_viewer.presentation.domain.ImageViewer
 import com.ebt.finance.ui.theme.Accent
 import com.ebt.finance.ui.theme.Primary
+import com.ebt.finance.ui.theme.Secondary
 import com.ebt.finance.ui.theme.Subtitle
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -59,8 +61,11 @@ fun PemasukanDetailScreen(
 ){
     val state = viewModel.state.value
     val disState = viewModel.disState.value
+    val delState = viewModel.delState.value
 
     var isImageError by remember { mutableStateOf(false) }
+    var errorDialog by remember { mutableStateOf(false) }
+    var delDialog by remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
@@ -99,7 +104,7 @@ fun PemasukanDetailScreen(
             )
             Spacer(modifier = Modifier.padding(top = 16.dp))
             Text(
-                text = "Detail pemasukan",
+                text = state.id,
                 fontWeight = FontWeight(500),
                 fontSize = 24.sp
             )
@@ -231,7 +236,7 @@ fun PemasukanDetailScreen(
                 }
             }
             OutlinedButton(
-                onClick = { /*TODO*/ },
+                onClick = { delDialog = true },
                 shape = RoundedCornerShape(8.dp),
                 border = BorderStroke(
                     1.dp,
@@ -322,5 +327,101 @@ fun PemasukanDetailScreen(
                 color = Accent
             )
         }
+    }
+
+    if(delState.error.isNotBlank()){
+        errorDialog = true
+    }
+
+    if (errorDialog) {
+        AlertDialog(
+            onDismissRequest = {
+
+            },
+            title = {
+                Text(text = "Error")
+            },
+            text = {
+                Text(text = delState.error)
+            },
+            confirmButton = {
+                Text(
+                    text = "Kembali",
+                    modifier = Modifier
+                        .clickable {
+                            errorDialog = false
+                            delState.error = ""
+                        }
+                )
+            }
+        )
+    }
+
+    if(delState.isLoading) {
+        AlertDialog(
+            onDismissRequest = {
+
+            },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    CircularProgressIndicator()
+                    Spacer(modifier = Modifier.padding(vertical = 12.dp))
+                    Text(
+                        text = "Loading...",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight(500),
+                        color = Secondary
+                    )
+                }
+            },
+            confirmButton = {
+
+            }
+        )
+    }
+
+    if(delState.isSuccess){
+        navController.navigate("auth_screen") {
+            popUpTo(0)
+        }
+    }
+
+    if (delDialog) {
+        AlertDialog(
+            onDismissRequest = {
+
+            },
+            title = {
+                Text(text = "Hapus pemasukan")
+            },
+            text = {
+                Text(text = "Apakah anda yakin ingin menghapus pemasukan?")
+            },
+            confirmButton = {
+                Text(
+                    text = "Ya",
+                    color = Color.Red,
+                    modifier = Modifier
+                        .clickable {
+                            viewModel.deletePemasukan()
+                        }
+                )
+            },
+            dismissButton = {
+                Text(
+                    text = "Tidak",
+                    modifier = Modifier
+                        .clickable {
+                            delDialog = false
+                        }
+                        .padding(end = 16.dp)
+                )
+            }
+        )
     }
 }

@@ -10,7 +10,9 @@ import com.ebt.finance.R
 import com.ebt.finance.common.Constant
 import com.ebt.finance.common.DataStoreRepository
 import com.ebt.finance.common.Resource
+import com.ebt.finance.features.admin.pemasukan_detail.domain.use_case.DeletePemasukanUseCase
 import com.ebt.finance.features.admin.pemasukan_detail.domain.use_case.GetPemasukanDetailUseCase
+import com.ebt.finance.features.admin.pemasukan_detail.presentation.state.DeletePemasukanState
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.state.DistributorState
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.state.PemasukanDetailState
 import com.ebt.finance.features.image_viewer.presentation.domain.ImageViewer
@@ -23,8 +25,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PemasukanDetailViewModel @Inject constructor(
-    private val useCase: GetPemasukanDetailUseCase,
-    savedStateHandle: SavedStateHandle,
+    private val getUseCase: GetPemasukanDetailUseCase,
+    private val deleteUseCase: DeletePemasukanUseCase,
+    private val savedStateHandle: SavedStateHandle,
     private val dataStore: DataStoreRepository,
     private val formatter: NumberFormat,
     private val gson: Gson
@@ -35,6 +38,9 @@ class PemasukanDetailViewModel @Inject constructor(
 
     private val _disState = mutableStateOf(DistributorState())
     val disState: State<DistributorState> = _disState
+
+    private val _delState = mutableStateOf(DeletePemasukanState())
+    val delState: State<DeletePemasukanState> = _delState
 
     init {
         savedStateHandle.get<String>(Constant.PARAM_DISTRIBUTOR)?.let {
@@ -52,7 +58,7 @@ class PemasukanDetailViewModel @Inject constructor(
 
     private fun getDetailPemasukan(id: String, token: String) {
         viewModelScope.launch {
-            useCase
+            getUseCase
                 .invoke(id, token)
                 .collect {
                     when(it) {
@@ -67,6 +73,41 @@ class PemasukanDetailViewModel @Inject constructor(
                         }
                     }
                 }
+        }
+    }
+
+    fun deletePemasukan() {
+        savedStateHandle.get<String>(Constant.PARAM_INCOME_ID)?.let {
+            viewModelScope.launch {
+                dataStore.getData(stringPreferencesKey(R.string.TOKEN_KEY.toString()))
+                    .collect { token ->
+                        _delState.value = DeletePemasukanState(isLoading = true)
+                        if (it.isNotBlank()) {
+                            if (token.isNotBlank()) {
+                                deleteUseCase
+                                    .invoke(it, "Bearer $token")
+                                    .collect { resource ->
+                                        when (resource) {
+                                            is Resource.Success -> {
+                                                _delState.value =
+                                                    DeletePemasukanState(isSuccess = true)
+                                            }
+
+                                            is Resource.Loading -> {
+                                                _delState.value =
+                                                    DeletePemasukanState(isLoading = true)
+                                            }
+
+                                            is Resource.Error -> {
+                                                _delState.value =
+                                                    DeletePemasukanState(error = resource.message.toString())
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+                    }
+            }
         }
     }
 

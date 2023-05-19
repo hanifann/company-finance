@@ -2,6 +2,7 @@ package com.ebt.finance.features.admin.pemasukan_detail.data.repositories
 
 import arrow.core.Either
 import com.ebt.finance.common.FailedDto
+import com.ebt.finance.features.admin.pemasukan.data.dto.PemasukanDataDto
 import com.ebt.finance.features.admin.pemasukan.data.dto.PemasukanDto
 import com.ebt.finance.features.admin.pemasukan_detail.data.data_source.PemasukanDetailRemoteDataSource
 import com.ebt.finance.features.admin.pemasukan_detail.domain.repositories.PemasukanDetailRepository
@@ -15,5 +16,9 @@ class PemasukanDetailRepositoryImpl @Inject constructor(
         token: String
     ): Either<FailedDto, PemasukanDto> {
         return remoteDataSource.getPemasukanDetail(id, token)
+    }
+
+    override suspend fun deletePemasukan(id: String, token: String): Either<FailedDto, PemasukanDataDto> {
+        return remoteDataSource.deletePemasukan(id, token)
     }
 }
