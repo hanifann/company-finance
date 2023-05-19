@@ -151,7 +151,7 @@ fun HomeAdmin(
             FloatingActionButton(
                 onClick = {
                     if(tabIndex == 0){
-                        Log.e("beranda", "HomeAdmin: Pemasukan", )
+                        navController.navigate("tambah_data/pemasukan")
                     } else {
                         Log.e("beranda", "HomeAdmin: Pengeluarann", )
                     }
