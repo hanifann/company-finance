@@ -7,4 +7,5 @@ sealed class Route (val route: String) {
     object PemasukanDetailScreen: Route("income_detail")
     object PengeluaranDetailScreen: Route("expanse_detail")
     object ImageViewerScreen: Route("image_viewer")
+    object TambahDataScreen: Route("tambah_data")
 }

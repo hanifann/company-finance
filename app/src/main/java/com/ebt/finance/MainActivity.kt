@@ -13,6 +13,7 @@ import com.ebt.finance.common.Constant
 import com.ebt.finance.features.admin.home.presentation.screen.HomeAdmin
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.screen.PemasukanDetailScreen
 import com.ebt.finance.features.admin.pengeluaran_detail.presentation.screen.PengeluaranDetailScreen
+import com.ebt.finance.features.admin.tambah_data.presentation.screen.TambahDataScreen
 import com.ebt.finance.features.auth.presentation.screens.AuthScreen
 import com.ebt.finance.features.image_viewer.presentation.screens.ImageViewerScreen
 import com.ebt.finance.features.login.presentation.screen.LoginScreen
@@ -73,6 +74,11 @@ class MainActivity : ComponentActivity() {
                             route = Route.ImageViewerScreen.route + "/{${Constant.PARAM_IMG_URL}}"
                         ) {
                             ImageViewerScreen(navController = navController)
+                        }
+                        composable(
+                            route = Route.TambahDataScreen.route + "/{${Constant.PARAM_KATEGORI}}"
+                        ) {
+                            TambahDataScreen()
                         }
                     }
                 }
