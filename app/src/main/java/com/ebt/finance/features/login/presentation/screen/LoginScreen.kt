@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ebt.finance.R
-import com.ebt.finance.features.login.presentation.component.LoginTextFieldComponent
+import com.ebt.finance.features.login.presentation.component.CustomTextFieldComponent
 import com.ebt.finance.features.login.presentation.viewmodel.LoginViewModel
 import com.ebt.finance.features.login.presentation.viewmodel.UserDataViewModel
 import com.ebt.finance.ui.theme.Accent
@@ -110,14 +110,15 @@ fun LoginScreen(
                     horizontal = 12.dp
                 )
             )
-            LoginTextFieldComponent(
+            CustomTextFieldComponent(
                 interactionSource = emailInteractionSource,
                 placeholder = "Email",
                 keyboardType = KeyboardType.Email,
                 textFieldValue = emailTextFieldValue,
                 onValueChange = {
                     emailTextFieldValue = it
-                }
+                },
+                trailingIcon = {}
             )
         }
         Spacer(
@@ -142,7 +143,7 @@ fun LoginScreen(
                     horizontal = 12.dp
                 )
             )
-            LoginTextFieldComponent(
+            CustomTextFieldComponent(
                 interactionSource = passwordInteractionSource,
                 placeholder = "Password",
                 keyboardType = KeyboardType.Password,
@@ -150,10 +151,40 @@ fun LoginScreen(
                 onValueChange = {
                     passwordTextFieldValue = it
                 },
-                isWithTrailingIcon = true,
                 isVisible = isVisible,
-                onIconTap = {
-                    isVisible = !isVisible
+                trailingIcon = {
+                    if (isVisible)
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_visibility_off_24),
+                            contentDescription = "visible off",
+                            modifier = Modifier
+                                .clickable(
+                                    onClick = {
+                                        isVisible = !isVisible
+                                    }
+                                ),
+                            tint = Color(
+                                103,
+                                115,
+                                136
+                            )
+                        )
+                    else
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_visibility_24),
+                            contentDescription = "visible on",
+                            modifier = Modifier
+                                .clickable(
+                                    onClick = {
+                                        isVisible = !isVisible
+                                    }
+                                ),
+                            tint = Color(
+                                103,
+                                115,
+                                136
+                            )
+                        )
                 }
             )
         }
@@ -198,7 +229,9 @@ fun LoginScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        color = Accent
+                    )
                     Spacer(modifier = Modifier.padding(vertical = 12.dp))
                     Text(
                         text = "Loading...",
