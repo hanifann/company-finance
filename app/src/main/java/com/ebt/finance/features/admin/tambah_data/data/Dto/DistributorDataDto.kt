@@ -9,7 +9,7 @@ data class DistributorDataDto(
     val id: String,
     @SerializedName("nama_distributor")
     val namaDistributor: String,
-    @SerializedName("nama_penjab")
+    @SerializedName("penjab")
     val namaPenjab: String,
     @SerializedName("tlp")
     val tlp: String,
