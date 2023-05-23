@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = Route.TambahDataScreen.route + "/{${Constant.PARAM_KATEGORI}}"
                         ) {
-                            TambahDataScreen()
+                            TambahDataScreen(navController = navController)
                         }
                     }
                 }
