@@ -104,7 +104,7 @@ fun PemasukanDetailScreen(
             )
             Spacer(modifier = Modifier.padding(top = 16.dp))
             Text(
-                text = state.id,
+                text = "Detail Pemasukan",
                 fontWeight = FontWeight(500),
                 fontSize = 24.sp
             )
@@ -127,7 +127,7 @@ fun PemasukanDetailScreen(
                         title = "Jumlah",
                         value = viewModel.formatCurrenty(state.data.data[0].totalPemasukan.toDouble()),
                         modifier = Modifier
-                            .padding(vertical = 8.dp)
+                            .padding(top = 16.dp, bottom = 8.dp)
                     )
                     Divider(
                         color = Subtitle,
@@ -369,7 +369,9 @@ fun PemasukanDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        color = Accent
+                    )
                     Spacer(modifier = Modifier.padding(vertical = 12.dp))
                     Text(
                         text = "Loading...",
