@@ -274,7 +274,9 @@ fun PemasukanDetailScreen(
             )
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
             ElevatedButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navController.navigateUp()
+                },
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.elevatedButtonColors(
                     containerColor = Accent
