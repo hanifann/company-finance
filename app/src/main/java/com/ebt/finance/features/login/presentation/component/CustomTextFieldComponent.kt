@@ -34,6 +34,7 @@ fun CustomTextFieldComponent(
     isVisible: Boolean = false,
     trailingIcon:  @Composable (() -> Unit) = {},
     readOnly: Boolean = false,
+    isSingleLine: Boolean = true
 ) {
 
     BasicTextField(
@@ -48,7 +49,7 @@ fun CustomTextFieldComponent(
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType
         ),
-        singleLine = true,
+        singleLine = isSingleLine,
         visualTransformation = if(isVisible) PasswordVisualTransformation() else VisualTransformation.None,
         readOnly = readOnly,
         enabled = !readOnly
@@ -57,7 +58,7 @@ fun CustomTextFieldComponent(
             value = textFieldValue.text,
             innerTextField = it,
             enabled = !readOnly,
-            singleLine = true,
+            singleLine = isSingleLine,
             interactionSource = interactionSource,
             visualTransformation = if(isVisible) PasswordVisualTransformation() else VisualTransformation.None,
             contentPadding = PaddingValues(
