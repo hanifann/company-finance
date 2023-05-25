@@ -3,7 +3,10 @@
 package com.ebt.finance.features.admin.tambah_data.presentation.screen
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.net.Uri
+import android.provider.OpenableColumns
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -44,6 +47,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -54,6 +58,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.ebt.finance.R
+import com.ebt.finance.features.admin.tambah_data.domain.model.TambahData
 import com.ebt.finance.features.admin.tambah_data.presentation.components.ColumnTitleAndTextField
 import com.ebt.finance.features.admin.tambah_data.presentation.components.ExposedDropdownMenuBoxComponent
 import com.ebt.finance.features.admin.tambah_data.presentation.viewmodels.TambahDataViewModel
@@ -66,6 +71,7 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.io.File
 import java.time.format.DateTimeFormatter
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -78,6 +84,7 @@ fun TambahDataScreen(
 
     val kategoriState = viewModel.kategoriState.value
     val distributorState = viewModel.distributorState.value
+    val tambahPemasukanState = viewModel.tambahPemasukanState.value
 
     var dropDownValue by remember {mutableStateOf("")}
     var isExpanded by remember {mutableStateOf(false)}
@@ -88,16 +95,47 @@ fun TambahDataScreen(
     var tglTextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     val tglInteractionSource = remember { MutableInteractionSource() }
 
+    var jenisDataTextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
+    val jenisDataInteractionSource = remember { MutableInteractionSource() }
+
+    var keteranganDataTextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
+    val keteranganDataInteractionSource = remember { MutableInteractionSource() }
+
     val dialogState = rememberMaterialDialogState()
+
+    val context = LocalContext.current
 
     var selectedImage by remember {
         mutableStateOf<Uri?>(null)
     }
 
-    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri -> selectedImage = uri }
-    )
+    var distributorId by remember {
+        mutableStateOf("")
+    }
+
+    var errorDialogShow by remember { mutableStateOf(false) }
+    var successDialogShow by remember { mutableStateOf(false) }
+
+    fun getRealPath(uri: Uri, context: Context): File {
+        val returnCursor = context.contentResolver.query(uri, null, null, null, null)
+        val nameIndex =  returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        returnCursor.moveToFirst()
+        val name = returnCursor.getString(nameIndex)
+        val file = File(context.filesDir, name)
+        returnCursor.close()
+        return file
+    }
+
+    val selectPhoto = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            Log.d("PhotoPicker", "Selected URI: ${getRealPath(uri, context)}")
+            selectedImage = uri
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
+
+
 
     Scaffold(
         containerColor = Primary,
@@ -124,6 +162,59 @@ fun TambahDataScreen(
                     .padding(vertical = it.calculateTopPadding() + 16.dp, horizontal = 16.dp)
             ) {
                 ColumnTitleAndTextField(
+                    title = "Jenis ${kategoriState.kategori}",
+                    textField = {
+                        CustomTextFieldComponent(
+                            textFieldValue = jenisDataTextFieldValue,
+                            onValueChange = { value ->
+                                jenisDataTextFieldValue = value
+                            },
+                            interactionSource = jenisDataInteractionSource,
+                            placeholder = "Jenis ${kategoriState.kategori}",
+                            keyboardType = KeyboardType.Text
+                        )
+                    }
+                )
+                Spacer(modifier = Modifier.padding(vertical = 16.dp))
+                ColumnTitleAndTextField(
+                    title = "Total ${kategoriState.kategori}",
+                    textField = {
+                        CustomTextFieldComponent(
+                            textFieldValue = pemasukanTextFieldValue,
+                            onValueChange = { value ->
+                                pemasukanTextFieldValue = value
+                            },
+                            interactionSource = pemasukanInteractionSource,
+                            placeholder = "Jumlah ${kategoriState.kategori}",
+                            keyboardType = KeyboardType.Decimal
+                        )
+                    }
+                )
+                Spacer(modifier = Modifier.padding(vertical = 16.dp))
+                Box(
+                    modifier = Modifier
+                        .clickable {
+                            dialogState.show()
+                        }
+                ) {
+                    ColumnTitleAndTextField(
+                        title = "Tanggal ${kategoriState.kategori}",
+                        textField = {
+                            CustomTextFieldComponent(
+                                textFieldValue = tglTextFieldValue,
+                                onValueChange = { value ->
+                                    tglTextFieldValue = value
+                                },
+                                interactionSource = tglInteractionSource,
+                                placeholder = "Tanggal ${kategoriState.kategori}",
+                                keyboardType = KeyboardType.Decimal,
+                                readOnly = true
+                            )
+                        },
+                    )
+                }
+                Spacer(modifier = Modifier.padding(vertical = 16.dp))
+                ColumnTitleAndTextField(
                     title = "Distributor",
                     textField = {
                         ExposedDropdownMenuBoxComponent(
@@ -132,6 +223,7 @@ fun TambahDataScreen(
                             onClick = { item ->
                                 dropDownValue = item.namaDistributor
                                 isExpanded = !isExpanded
+                                distributorId = item.id
                             },
                             isExpanded = isExpanded,
                             onDismiss = {
@@ -146,45 +238,23 @@ fun TambahDataScreen(
                 )
                 Spacer(modifier = Modifier.padding(vertical = 16.dp))
                 ColumnTitleAndTextField(
-                    title = "Total Pemasukan",
+                    title = "Keterangan ${kategoriState.kategori}",
                     textField = {
                         CustomTextFieldComponent(
-                            textFieldValue = pemasukanTextFieldValue,
+                            isSingleLine = false,
+                            textFieldValue = keteranganDataTextFieldValue,
                             onValueChange = { value ->
-                                pemasukanTextFieldValue = value
+                                keteranganDataTextFieldValue = value
                             },
-                            interactionSource = pemasukanInteractionSource,
-                            placeholder = "Jumlah pemasukan",
-                            keyboardType = KeyboardType.Decimal
+                            interactionSource = keteranganDataInteractionSource,
+                            placeholder = "Keterangan ${kategoriState.kategori}",
+                            keyboardType = KeyboardType.Text
                         )
                     }
                 )
                 Spacer(modifier = Modifier.padding(vertical = 16.dp))
-                Box(
-                    modifier = Modifier
-                        .clickable {
-                            dialogState.show()
-                        }
-                ) {
-                    ColumnTitleAndTextField(
-                        title = "Tanggal Pemasukan",
-                        textField = {
-                            CustomTextFieldComponent(
-                                textFieldValue = tglTextFieldValue,
-                                onValueChange = { value ->
-                                    tglTextFieldValue = value
-                                },
-                                interactionSource = tglInteractionSource,
-                                placeholder = "Tanggal pemasukan",
-                                keyboardType = KeyboardType.Decimal,
-                                readOnly = true
-                            )
-                        },
-                    )
-                }
-                Spacer(modifier = Modifier.padding(vertical = 16.dp))
                 ColumnTitleAndTextField(
-                    title = "Bukti pemasukan",
+                    title = "Bukti ${kategoriState.kategori}",
                     textField = {
                         Spacer(modifier = Modifier.padding(vertical = 4.dp))
                         Box(
@@ -197,8 +267,10 @@ fun TambahDataScreen(
                                 )
                                 .height(256.dp)
                                 .clickable {
-                                    singlePhotoPickerLauncher.launch(
-                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                    selectPhoto.launch(
+                                        PickVisualMediaRequest(
+                                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                                        )
                                     )
                                 },
                             contentAlignment = Alignment.Center
@@ -237,7 +309,17 @@ fun TambahDataScreen(
                 Spacer(modifier = Modifier.padding(vertical = 16.dp))
                 ElevatedButton(
                     onClick = {
-
+                        viewModel.tambahPemasukan(
+                            TambahData(
+                                keterangan = jenisDataTextFieldValue.text,
+                                bukti ="",
+                                distributorId = distributorId,
+                                kategori = keteranganDataTextFieldValue.text,
+                                tgl = tglTextFieldValue.text,
+                                totalHarga = pemasukanTextFieldValue.text
+                            ),
+                            getRealPath(selectedImage!!, context)
+                        )
                     },
                     content = {
                         Text(
@@ -272,7 +354,7 @@ fun TambahDataScreen(
         }
     }
 
-    if(distributorState.isLoading) {
+    if(distributorState.isLoading || tambahPemasukanState.loading) {
         AlertDialog(
             onDismissRequest = {
 
@@ -298,6 +380,63 @@ fun TambahDataScreen(
             },
             confirmButton = {
 
+            }
+        )
+    }
+
+    if(tambahPemasukanState.message.isNotBlank() || distributorState.message.isNotBlank()){
+        errorDialogShow = true
+    }
+
+    if(errorDialogShow){
+        AlertDialog(
+            onDismissRequest = {
+
+            },
+            title = {
+                Text(text = "Error")
+            },
+            text = {
+                Text(text = tambahPemasukanState.message)
+            },
+            confirmButton = {
+                Text(
+                    text = "Kembali",
+                    modifier = Modifier
+                        .clickable {
+                            errorDialogShow = false
+                            tambahPemasukanState.message = ""
+                            distributorState.message = ""
+                        }
+                )
+            }
+        )
+    }
+
+    if(tambahPemasukanState.isSuccess){
+        successDialogShow = true
+    }
+
+    if(successDialogShow){
+        AlertDialog(
+            onDismissRequest = {
+
+            },
+            title = {
+                Text(text = "Berhasil")
+            },
+            text = {
+                Text(text = "Data berhasil ditambahkan")
+            },
+            confirmButton = {
+                Text(
+                    text = "Kembali",
+                    modifier = Modifier
+                        .clickable {
+                            successDialogShow = false
+                            tambahPemasukanState.isSuccess = false
+                        }
+                )
             }
         )
     }
