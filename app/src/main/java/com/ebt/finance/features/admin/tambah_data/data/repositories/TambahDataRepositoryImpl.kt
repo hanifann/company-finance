@@ -3,8 +3,9 @@ package com.ebt.finance.features.admin.tambah_data.data.repositories
 import arrow.core.Either
 import com.ebt.finance.common.FailedDto
 import com.ebt.finance.features.admin.tambah_data.data.Dto.DistributorDto
+import com.ebt.finance.features.admin.tambah_data.data.Dto.TambahPemasukaDto
 import com.ebt.finance.features.admin.tambah_data.data.datasources.TambahDataRemoteDataSource
-import com.ebt.finance.features.admin.tambah_data.domain.model.TambahData
+import com.ebt.finance.features.admin.tambah_data.domain.model.TambahDataBody
 import com.ebt.finance.features.admin.tambah_data.domain.repositories.TambahDataRepository
 import javax.inject.Inject
 
@@ -15,25 +16,29 @@ class TambahDataRepositoryImpl @Inject constructor(
         return datasource.getDistributor(token)
     }
 
-    override suspend fun postPemasukan(token: String, data: TambahData): Either<FailedDto, Void> {
+    override suspend fun postPemasukan(
+        token: String,
+        data: TambahDataBody
+    ): Either<FailedDto, TambahPemasukaDto> {
         return datasource.postPemasukan(
+            token = token,
             jenisPemasukan = data.jenisData,
             keterangan = data.keterangan,
-            tgl = data.tgl,
             totalPemasukan = data.totalHarga,
+            tgl = data.tgl,
             bukti = data.bukti,
-            token = token
+            distributorId = data.distributorId
         )
     }
 
-    override suspend fun postPengeluaran(token: String, data: TambahData): Either<FailedDto, Void> {
-        return datasource.postPemasukan(
-            jenisPemasukan = data.jenisData,
-            keterangan = data.keterangan,
-            tgl = data.tgl,
-            totalPemasukan = data.totalHarga,
-            bukti = data.bukti,
-            token = token
-        )
-    }
+//    override suspend fun postPengeluaran(token: String, data: TambahData): Either<FailedDto, Void> {
+//        return datasource.postPemasukan(
+//            jenisPemasukan = data.jenisData,
+//            keterangan = data.keterangan,
+//            tgl = data.tgl,
+//            totalPemasukan = data.totalHarga,
+//            bukti = data.bukti,
+//            token = token
+//        )
+//    }
 }
