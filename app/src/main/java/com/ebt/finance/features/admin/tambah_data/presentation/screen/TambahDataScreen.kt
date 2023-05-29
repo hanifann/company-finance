@@ -2,11 +2,11 @@
 
 package com.ebt.finance.features.admin.tambah_data.presentation.screen
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
-import android.provider.OpenableColumns
+import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -81,8 +81,7 @@ import java.io.File
 import java.time.format.DateTimeFormatter
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun TambahDataScreen(
     viewModel: TambahDataViewModel = hiltViewModel(),
@@ -127,7 +126,7 @@ fun TambahDataScreen(
 
     fun getRealPath(uri: Uri, context: Context): File {
         val returnCursor = context.contentResolver.query(uri, null, null, null, null)
-        val nameIndex =  returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        val nameIndex =  returnCursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
         returnCursor.moveToFirst()
         val name = returnCursor.getString(nameIndex)
         val path: File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
@@ -148,6 +147,9 @@ fun TambahDataScreen(
 
     val storagePermissonState = rememberPermissionState(
         permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
+    )
+    val storagePermissionState13 = rememberPermissionState(
+        permission = android.Manifest.permission.READ_MEDIA_IMAGES
     )
 
 
@@ -282,14 +284,18 @@ fun TambahDataScreen(
                                 )
                                 .height(256.dp)
                                 .clickable {
-                                    if (storagePermissonState.status.isGranted) {
+                                    if (storagePermissonState.status.isGranted || storagePermissionState13.status.isGranted) {
                                         selectPhoto.launch(
                                             PickVisualMediaRequest(
                                                 ActivityResultContracts.PickVisualMedia.ImageOnly
                                             )
                                         )
                                     } else {
-                                        storagePermissonState.launchPermissionRequest()
+                                        if (Build.VERSION.SDK_INT < 33) {
+                                            storagePermissonState.launchPermissionRequest()
+                                        } else {
+                                            storagePermissionState13.launchPermissionRequest()
+                                        }
                                     }
                                 },
                             contentAlignment = Alignment.Center
