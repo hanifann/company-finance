@@ -40,7 +40,10 @@ import androidx.navigation.NavController
 import com.ebt.finance.R
 import com.ebt.finance.features.admin.home.presentation.viewModel.HomeAdminViewModel
 import com.ebt.finance.features.admin.pemasukan.presentation.screen.PemasukanScreen
+import com.ebt.finance.features.admin.pemasukan.presentation.state.GetPemasukanState
+import com.ebt.finance.features.admin.pemasukan.presentation.viewmodel.PemasukanViewModel
 import com.ebt.finance.features.admin.pengeluaran.presentation.screen.PengeluaranScreen
+import com.ebt.finance.features.admin.pengeluaran.presentation.viewmodel.PengeluaranViewModel
 import com.ebt.finance.ui.theme.Accent
 import com.ebt.finance.ui.theme.Primary
 
@@ -48,7 +51,10 @@ import com.ebt.finance.ui.theme.Primary
 @Composable
 fun HomeAdmin(
     navController: NavController,
-    viewModel: HomeAdminViewModel = hiltViewModel()
+    viewModel: HomeAdminViewModel = hiltViewModel(),
+    pemasukanViewModel: PemasukanViewModel,
+    pengeluaranViewModel: PengeluaranViewModel,
+    pemasukanState: GetPemasukanState
 ) {
     var tabIndex by remember {
         mutableStateOf(0)
@@ -64,7 +70,7 @@ fun HomeAdmin(
                     .fillMaxWidth()
             ) {
                 TopAppBar(
-                    colors = TopAppBarDefaults.smallTopAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Accent
                     ),
                     title = {
@@ -139,10 +145,14 @@ fun HomeAdmin(
         content = {
             Box(
                 modifier = Modifier
-                    .padding(vertical = it.calculateTopPadding())
+                    .padding(top = it.calculateTopPadding())
             ){
                 when (tabIndex){
-                    0 -> PemasukanScreen(navController = navController)
+                    0 -> PemasukanScreen(
+                        viewModel = pemasukanViewModel,
+                        navController = navController,
+                        state = pemasukanState
+                    )
                     1 -> PengeluaranScreen(navController)
                 }
             }

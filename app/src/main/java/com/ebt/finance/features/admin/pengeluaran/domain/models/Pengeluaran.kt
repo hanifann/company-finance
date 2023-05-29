@@ -11,7 +11,7 @@ data class PengeluaranData (
     val keterangan: String,
     val totalPengeluaran: String,
     val tgl: String,
-    val buktiPengeluaran: String,
+    val buktiPengeluaran: String?,
     val updatedAt: String,
     val createdAt: String
 )

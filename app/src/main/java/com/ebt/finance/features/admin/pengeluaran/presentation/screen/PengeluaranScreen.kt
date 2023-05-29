@@ -30,6 +30,7 @@ fun PengeluaranScreen(
 ) {
 
     val state = viewModel.state.value
+    viewModel.getToken()
 
     LazyColumn(
         modifier = Modifier

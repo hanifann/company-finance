@@ -9,9 +9,12 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ebt.finance.common.Constant
 import com.ebt.finance.features.admin.home.presentation.screen.HomeAdmin
+import com.ebt.finance.features.admin.pemasukan.presentation.viewmodel.PemasukanViewModel
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.screen.PemasukanDetailScreen
+import com.ebt.finance.features.admin.pengeluaran.presentation.viewmodel.PengeluaranViewModel
 import com.ebt.finance.features.admin.pengeluaran_detail.presentation.screen.PengeluaranDetailScreen
 import com.ebt.finance.features.admin.tambah_data.presentation.screen.TambahDataScreen
 import com.ebt.finance.features.auth.presentation.screens.AuthScreen
@@ -37,6 +40,8 @@ class MainActivity : ComponentActivity() {
                     color = Primary
                 ) {
                     val navController = rememberAnimatedNavController()
+                    val pemasukanViewModel: PemasukanViewModel = hiltViewModel()
+                    val pengeluaranViewModel: PengeluaranViewModel = hiltViewModel()
                     AnimatedNavHost(
                         navController = navController,
                         startDestination = Route.AuthScreen.route,
@@ -58,7 +63,12 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = Route.HomeAdminScreen.route
                         ){
-                            HomeAdmin(navController = navController)
+                            HomeAdmin(
+                                navController = navController,
+                                pemasukanViewModel = pemasukanViewModel,
+                                pengeluaranViewModel = pengeluaranViewModel,
+                                pemasukanState = pemasukanViewModel.state.value
+                            )
                         }
                         composable(
                             route = Route.PemasukanDetailScreen.route + "/{incomeId}/{distributor}"
@@ -78,7 +88,11 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = Route.TambahDataScreen.route + "/{${Constant.PARAM_KATEGORI}}"
                         ) {
-                            TambahDataScreen(navController = navController)
+                            TambahDataScreen(
+                                navController = navController,
+                                pemasukanViewModel = pemasukanViewModel,
+                                pengeluaranViewModel = pengeluaranViewModel
+                            )
                         }
                     }
                 }

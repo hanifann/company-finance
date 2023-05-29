@@ -1,10 +1,11 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 
 package com.ebt.finance.features.admin.tambah_data.presentation.screen
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.os.Environment
 import android.provider.OpenableColumns
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -58,6 +59,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.ebt.finance.R
+import com.ebt.finance.features.admin.pemasukan.presentation.viewmodel.PemasukanViewModel
+import com.ebt.finance.features.admin.pengeluaran.presentation.viewmodel.PengeluaranViewModel
 import com.ebt.finance.features.admin.tambah_data.domain.model.TambahData
 import com.ebt.finance.features.admin.tambah_data.presentation.components.ColumnTitleAndTextField
 import com.ebt.finance.features.admin.tambah_data.presentation.components.ExposedDropdownMenuBoxComponent
@@ -67,6 +70,9 @@ import com.ebt.finance.ui.theme.Accent
 import com.ebt.finance.ui.theme.Primary
 import com.ebt.finance.ui.theme.Secondary
 import com.ebt.finance.ui.theme.Subtitle
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
@@ -74,12 +80,15 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.io.File
 import java.time.format.DateTimeFormatter
 
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TambahDataScreen(
     viewModel: TambahDataViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    pemasukanViewModel: PemasukanViewModel,
+    pengeluaranViewModel: PengeluaranViewModel
 ) {
 
     val kategoriState = viewModel.kategoriState.value
@@ -121,7 +130,9 @@ fun TambahDataScreen(
         val nameIndex =  returnCursor!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
         returnCursor.moveToFirst()
         val name = returnCursor.getString(nameIndex)
-        val file = File(context.filesDir, name)
+        val path: File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val file = File(path, name)
+
         returnCursor.close()
         return file
     }
@@ -134,6 +145,10 @@ fun TambahDataScreen(
             Log.d("PhotoPicker", "No media selected")
         }
     }
+
+    val storagePermissonState = rememberPermissionState(
+        permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
+    )
 
 
 
@@ -267,11 +282,15 @@ fun TambahDataScreen(
                                 )
                                 .height(256.dp)
                                 .clickable {
-                                    selectPhoto.launch(
-                                        PickVisualMediaRequest(
-                                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    if (storagePermissonState.status.isGranted) {
+                                        selectPhoto.launch(
+                                            PickVisualMediaRequest(
+                                                ActivityResultContracts.PickVisualMedia.ImageOnly
+                                            )
                                         )
-                                    )
+                                    } else {
+                                        storagePermissonState.launchPermissionRequest()
+                                    }
                                 },
                             contentAlignment = Alignment.Center
                         ) {
@@ -420,7 +439,7 @@ fun TambahDataScreen(
     if(successDialogShow){
         AlertDialog(
             onDismissRequest = {
-
+                pemasukanViewModel.getToken()
             },
             title = {
                 Text(text = "Berhasil")
@@ -429,12 +448,16 @@ fun TambahDataScreen(
                 Text(text = "Data berhasil ditambahkan")
             },
             confirmButton = {
+
+            },
+            dismissButton = {
                 Text(
                     text = "Kembali",
                     modifier = Modifier
                         .clickable {
                             successDialogShow = false
                             tambahPemasukanState.isSuccess = false
+                            pemasukanViewModel.getToken()
                         }
                 )
             }
