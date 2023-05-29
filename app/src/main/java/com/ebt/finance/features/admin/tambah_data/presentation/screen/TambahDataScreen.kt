@@ -2,14 +2,15 @@
 
 package com.ebt.finance.features.admin.tambah_data.presentation.screen
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -136,12 +137,15 @@ fun TambahDataScreen(
         return file
     }
 
-    val selectPhoto = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            Log.d("PhotoPicker", "Selected URI: ${getRealPath(uri, context)}")
-            selectedImage = uri
-        } else {
-            Log.d("PhotoPicker", "No media selected")
+    val pickImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == ComponentActivity.RESULT_OK) {
+            val data: Intent? = result.data
+            val uri = data?.data
+            uri?.let {
+                selectedImage = it
+            }
         }
     }
 
@@ -151,6 +155,14 @@ fun TambahDataScreen(
     val storagePermissionState13 = rememberPermissionState(
         permission = android.Manifest.permission.READ_MEDIA_IMAGES
     )
+
+    fun launchPhotoPicker(context: Context) {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        (context as? Activity)?.let {
+            pickImageLauncher.launch(intent)
+        }
+    }
 
 
 
@@ -285,11 +297,7 @@ fun TambahDataScreen(
                                 .height(256.dp)
                                 .clickable {
                                     if (storagePermissonState.status.isGranted || storagePermissionState13.status.isGranted) {
-                                        selectPhoto.launch(
-                                            PickVisualMediaRequest(
-                                                ActivityResultContracts.PickVisualMedia.ImageOnly
-                                            )
-                                        )
+                                        launchPhotoPicker(context)
                                     } else {
                                         if (Build.VERSION.SDK_INT < 33) {
                                             storagePermissonState.launchPermissionRequest()
