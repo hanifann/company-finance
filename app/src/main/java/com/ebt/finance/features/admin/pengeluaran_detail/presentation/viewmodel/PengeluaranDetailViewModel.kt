@@ -10,7 +10,9 @@ import com.ebt.finance.R
 import com.ebt.finance.common.Constant
 import com.ebt.finance.common.DataStoreRepository
 import com.ebt.finance.common.Resource
+import com.ebt.finance.features.admin.pengeluaran_detail.domain.use_case.DeletePengeluaranUseCase
 import com.ebt.finance.features.admin.pengeluaran_detail.domain.use_case.GetPengeluaranDetailUseCase
+import com.ebt.finance.features.admin.pengeluaran_detail.presentation.state.DeletePengeluaranState
 import com.ebt.finance.features.admin.pengeluaran_detail.presentation.state.JenisPengeluaranState
 import com.ebt.finance.features.admin.pengeluaran_detail.presentation.state.PengeluaranDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +23,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PengeluaranDetailViewModel @Inject constructor(
-    private val useCase: GetPengeluaranDetailUseCase,
-    savedStateHandle: SavedStateHandle,
+    private val getPengeluaranUseCase: GetPengeluaranDetailUseCase,
+    private val deletePengeluaranUseCase: DeletePengeluaranUseCase,
+    private val savedStateHandle: SavedStateHandle,
     private val dataStore: DataStoreRepository,
     private val formatter: NumberFormat
 ): ViewModel(){
@@ -32,6 +35,9 @@ class PengeluaranDetailViewModel @Inject constructor(
 
     private val _jenisPengeluaranState = mutableStateOf(JenisPengeluaranState())
     val jenisPengeluaranState: State<JenisPengeluaranState> = _jenisPengeluaranState
+
+    private val _deletePengeluaranState = mutableStateOf(DeletePengeluaranState())
+    val deletePengeluaranState: State<DeletePengeluaranState> = _deletePengeluaranState
 
     init {
         savedStateHandle.get<String>(Constant.PARAM_JENIS_PENGELUARAN)?.let {
@@ -49,7 +55,7 @@ class PengeluaranDetailViewModel @Inject constructor(
 
     private fun getDetailPemasukan(id: String, token: String) {
         viewModelScope.launch {
-            useCase
+            getPengeluaranUseCase
                 .invoke(id, token)
                 .collect {
                     when(it) {
@@ -74,6 +80,32 @@ class PengeluaranDetailViewModel @Inject constructor(
                     getDetailPemasukan(id, "Bearer $it")
                 } else {
                     _state.value = PengeluaranDetailState(isLoading = true)
+                }
+            }
+        }
+    }
+
+    fun deletePemasukan() {
+        savedStateHandle.get<String>(Constant.PARAM_EXPANSE_ID)?.let {
+            if (it.isNotBlank()){
+                viewModelScope.launch {
+                    dataStore.getData(stringPreferencesKey(R.string.TOKEN_KEY.toString())).collect{token ->
+                        if(token.isNotBlank()){
+                            deletePengeluaranUseCase.invoke(it, "Bearer $token").collect{data ->
+                                when(data){
+                                    is Resource.Loading ->{
+                                        _deletePengeluaranState.value = DeletePengeluaranState(true)
+                                    }
+                                    is Resource.Success -> {
+                                        _deletePengeluaranState.value = DeletePengeluaranState(isSuccess = true)
+                                    }
+                                    is Resource.Error -> {
+                                        _deletePengeluaranState.value = DeletePengeluaranState(error = data.message.toString())
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

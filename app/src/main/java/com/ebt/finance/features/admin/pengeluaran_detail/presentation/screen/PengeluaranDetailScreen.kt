@@ -1,7 +1,9 @@
 package com.ebt.finance.features.admin.pengeluaran_detail.presentation.screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,11 +16,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,6 +48,7 @@ import com.ebt.finance.features.admin.pemasukan_detail.presentation.components.R
 import com.ebt.finance.features.admin.pengeluaran_detail.presentation.viewmodel.PengeluaranDetailViewModel
 import com.ebt.finance.ui.theme.Accent
 import com.ebt.finance.ui.theme.Primary
+import com.ebt.finance.ui.theme.Secondary
 import com.ebt.finance.ui.theme.Subtitle
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -55,10 +60,15 @@ fun PengeluaranDetailScreen(
 ){
     val state = viewModel.state.value
     val disState = viewModel.jenisPengeluaranState.value
+    val deleteState = viewModel.deletePengeluaranState.value
 
     var isImageError by remember {
         mutableStateOf(false)
     }
+
+    var isError by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
+    var deleteDialog by remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
@@ -210,6 +220,69 @@ fun PengeluaranDetailScreen(
                     )
                 }
             }
+            OutlinedButton(
+                onClick = { deleteDialog = true },
+                shape = RoundedCornerShape(8.dp),
+                border = BorderStroke(
+                    1.dp,
+                    Color.Red
+                ),
+                content = {
+                    Text(
+                        text = "Hapus pengeluaran",
+                        color = Color.Red,
+                        fontWeight = FontWeight(500)
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+            Spacer(modifier = Modifier.padding(vertical = 2.dp))
+            OutlinedButton(
+                onClick = {  },
+                shape = RoundedCornerShape(8.dp),
+                border = BorderStroke(
+                    1.dp,
+                    Accent
+                ),
+                content = {
+                    Text(
+                        text = "Edit pengeluaran",
+                        color = Accent,
+                        fontWeight = FontWeight(500)
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+            Spacer(modifier = Modifier.padding(vertical = 2.dp))
+            ElevatedButton(
+                onClick = {
+                    navController.navigateUp()
+                },
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.elevatedButtonColors(
+                    containerColor = Accent
+                ),
+                content = {
+                    Text(
+                        text = "Kembali",
+                        color = Color.White,
+                        fontWeight = FontWeight(500)
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+        }
+    }
+
+    if(deleteState.isSuccess){
+        navController.navigate("auth_screen"){
+            popUpTo(0)
         }
     }
 
@@ -237,6 +310,69 @@ fun PengeluaranDetailScreen(
         }
     }
 
+    if(deleteState.isLoading) {
+        isLoading = true
+    }
+
+    if (isLoading){
+        AlertDialog(
+            onDismissRequest = {
+
+            },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    CircularProgressIndicator(
+                        color = Accent
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 12.dp))
+                    Text(
+                        text = "Loading...",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight(500),
+                        color = Secondary
+                    )
+                }
+            },
+            confirmButton = {
+
+            }
+        )
+    }
+
+    if(deleteState.error.isNotBlank()){
+        isError = true
+    }
+
+    if (isError) {
+        AlertDialog(
+            onDismissRequest = {
+
+            },
+            title = {
+                Text(text = "Error")
+            },
+            text = {
+                Text(text = deleteState.error)
+            },
+            confirmButton = {
+                Text(
+                    text = "Kembali",
+                    modifier = Modifier
+                        .clickable {
+                            isError = false
+                            deleteState.error = ""
+                            isLoading = false
+                        }
+                )
+            }
+        )
+    }
+
     if(state.isLoading) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -247,5 +383,39 @@ fun PengeluaranDetailScreen(
                 color = Accent
             )
         }
+    }
+
+    if (deleteDialog) {
+        AlertDialog(
+            onDismissRequest = {
+
+            },
+            title = {
+                Text(text = "Hapus pengeluaran")
+            },
+            text = {
+                Text(text = "Apakah anda yakin ingin menghapus pengeluaran?")
+            },
+            confirmButton = {
+                Text(
+                    text = "Ya",
+                    color = Color.Red,
+                    modifier = Modifier
+                        .clickable {
+                            viewModel.deletePemasukan()
+                        }
+                )
+            },
+            dismissButton = {
+                Text(
+                    text = "Tidak",
+                    modifier = Modifier
+                        .clickable {
+                            deleteDialog = false
+                        }
+                        .padding(end = 16.dp)
+                )
+            }
+        )
     }
 }

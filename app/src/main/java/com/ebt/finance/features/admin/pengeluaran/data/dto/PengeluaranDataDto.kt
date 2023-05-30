@@ -6,33 +6,33 @@ import com.google.gson.annotations.SerializedName
 
 data class PengeluaranDataDto(
     @SerializedName("id")
-    val id: String,
+    val id: String?,
     @SerializedName("jenis_pengeluaran")
     val jenisPengeluaran: String?,
     @SerializedName("jenis_pengeluaran_id")
-    val jenisPengeluaranId: String,
+    val jenisPengeluaranId: String?,
     @SerializedName("keterangan")
-    val keterangan: String,
+    val keterangan: String?,
     @SerializedName("total_pengeluaran")
-    val totalPengeluaran: String,
+    val totalPengeluaran: String?,
     @SerializedName("tgl")
-    val tgl: String,
+    val tgl: String?,
     @SerializedName("bukti_pengeluaran")
-    val buktiPengeluaran: String,
+    val buktiPengeluaran: String?,
     @SerializedName("updated_at")
-    val updatedAt: String,
+    val updatedAt: String?,
     @SerializedName("created_at")
-    val createdAt: String
+    val createdAt: String?
 )
 
 fun PengeluaranDataDto.toPengeluaranData(): PengeluaranData = PengeluaranData(
-    id,
+    id ?: "",
     jenisPengeluaran ?: "",
-    jenisPengeluaranId,
-    keterangan,
-    totalPengeluaran,
-    tgl,
-    buktiPengeluaran,
-    updatedAt,
-    createdAt
+    jenisPengeluaranId ?: "",
+    keterangan ?: "",
+    totalPengeluaran ?: "",
+    tgl ?: "",
+    buktiPengeluaran ?: "",
+    updatedAt ?: "",
+    createdAt ?: ""
 )
