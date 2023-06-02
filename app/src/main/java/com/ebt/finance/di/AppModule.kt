@@ -226,6 +226,8 @@ object AppModule {
             .create(UpdateDataRemoteDataSource::class.java)
     }
     //repository
+    @Provides
+    @Singleton
     fun provideUpdateDataRepository(dataSource: UpdateDataRemoteDataSource): UpdateDataRepository {
         return UpdateDataRepositoryImpl(dataSource)
     }
