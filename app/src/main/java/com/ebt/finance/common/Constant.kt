@@ -8,4 +8,5 @@ object Constant {
     const val PARAM_JENIS_PENGELUARAN = "jenisPengeluaran"
     const val PARAM_IMG_URL = "imgUrl"
     const val PARAM_KATEGORI = "kategori"
+    const val PARAM_DATA = "data"
 }
