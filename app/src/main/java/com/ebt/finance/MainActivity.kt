@@ -67,7 +67,8 @@ class MainActivity : ComponentActivity() {
                                 navController = navController,
                                 pemasukanViewModel = pemasukanViewModel,
                                 pengeluaranViewModel = pengeluaranViewModel,
-                                pemasukanState = pemasukanViewModel.state.value
+                                pemasukanState = pemasukanViewModel.state.value,
+                                pengeluaranState = pengeluaranViewModel.state.value
                             )
                         }
                         composable(

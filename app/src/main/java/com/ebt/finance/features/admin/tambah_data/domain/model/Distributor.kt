@@ -10,5 +10,6 @@ data class DistributorData(
     val namaPenjab: String,
     val tlp: String,
     val areaCover: String,
-    val alamat: String
+    val alamat: String,
+    val jenisPengeluaran: String
 )

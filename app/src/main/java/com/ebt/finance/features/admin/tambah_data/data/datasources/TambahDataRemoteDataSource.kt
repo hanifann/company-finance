@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.ebt.finance.common.FailedDto
 import com.ebt.finance.features.admin.tambah_data.data.Dto.DistributorDto
 import com.ebt.finance.features.admin.tambah_data.data.Dto.TambahPemasukaDto
+import com.ebt.finance.features.admin.tambah_data.data.Dto.TambahPengeluaranDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.GET
@@ -32,15 +33,20 @@ interface TambahDataRemoteDataSource {
         @Header("Authorization") token: String
     ): Either<FailedDto, TambahPemasukaDto>
 
-//    @Headers("Accept: application/json")
-//    @POST("/api/{tambah_pengeluaran}")
-//    @FormUrlEncoded
-//    suspend fun postPengeluaran(
-//        @Field("jenis_pengeluaran") jenisPengeluaran: String,
-//        @Field("keterangan") keterangan: String,
-//        @Field("tgl") tgl: String,
-//        @Field("total_pengeluaran") totalPengeluaran: String,
-//        @Field("bukti_pemasukan") bukti: String,
-//        token: String,
-//    ): Either<FailedDto, Void>
+    @Headers("Accept: application/json")
+    @POST("/api/tambah_pengeluaran")
+    @Multipart
+    suspend fun postPengeluaran(
+        @Part("jenis_pengeluaran") jenisPemasukan: RequestBody,
+        @Part("keterangan") keterangan: RequestBody,
+        @Part("tgl") tgl: RequestBody,
+        @Part("total_pengeluaran") totalPengeluaran: RequestBody,
+        @Part("jenis_pengeluaran_id") distributorId: RequestBody,
+        @Part bukti: MultipartBody.Part,
+        @Header("Authorization") token: String
+    ): Either<FailedDto, TambahPengeluaranDto>
+
+    @Headers("Accept: application/json")
+    @GET("/api/jenis_pengeluaran")
+    suspend fun getJenisPengeluaran(@Header("Authorization") token: String): Either<FailedDto, DistributorDto>
 }

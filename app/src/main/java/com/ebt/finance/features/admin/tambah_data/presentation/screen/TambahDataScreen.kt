@@ -94,6 +94,8 @@ fun TambahDataScreen(
     val kategoriState = viewModel.kategoriState.value
     val distributorState = viewModel.distributorState.value
     val tambahPemasukanState = viewModel.tambahPemasukanState.value
+    val tambahPengeluaranState = viewModel.tambahPengeluaranState.value
+    val jenisPengeluaranState = viewModel.jenisPengeluaranState.value
 
     var dropDownValue by remember {mutableStateOf("")}
     var isExpanded by remember {mutableStateOf(false)}
@@ -243,28 +245,55 @@ fun TambahDataScreen(
                     )
                 }
                 Spacer(modifier = Modifier.padding(vertical = 16.dp))
-                ColumnTitleAndTextField(
-                    title = "Distributor",
-                    textField = {
-                        ExposedDropdownMenuBoxComponent(
-                            dropdownValue = dropDownValue,
-                            distributor = distributorState.distributor,
-                            onClick = { item ->
-                                dropDownValue = item.namaDistributor
-                                isExpanded = !isExpanded
-                                distributorId = item.id
-                            },
-                            isExpanded = isExpanded,
-                            onDismiss = {
-                                isExpanded = false
-                            },
-                            onExpandChange = {
-                                isExpanded = !isExpanded
-                            }
+                if(kategoriState.kategori == "pemasukan"){
+                    ColumnTitleAndTextField(
+                        title = "Distributor",
+                        textField = {
+                            ExposedDropdownMenuBoxComponent(
+                                dropdownValue = dropDownValue,
+                                distributor = distributorState.distributor,
+                                onClick = { item ->
+                                    dropDownValue = item.namaDistributor
+                                    isExpanded = !isExpanded
+                                    distributorId = item.id
+                                },
+                                isExpanded = isExpanded,
+                                onDismiss = {
+                                    isExpanded = false
+                                },
+                                onExpandChange = {
+                                    isExpanded = !isExpanded
+                                }
 
-                        )
-                    }
-                )
+                            )
+                        }
+                    )
+                } else {
+                    ColumnTitleAndTextField(
+                        title = "Jenis Pengeluaran",
+                        textField = {
+                            ExposedDropdownMenuBoxComponent(
+                                dropdownValue = dropDownValue,
+                                distributor = jenisPengeluaranState.data,
+                                onClick = { item ->
+                                    dropDownValue = item.jenisPengeluaran
+                                    isExpanded = !isExpanded
+                                    distributorId = item.id
+                                },
+                                isExpanded = isExpanded,
+                                onDismiss = {
+                                    isExpanded = false
+                                },
+                                placeholder = "Jenis pengeluaran",
+                                onExpandChange = {
+                                    isExpanded = !isExpanded
+                                },
+                                isPemasukan = false
+
+                            )
+                        }
+                    )
+                }
                 Spacer(modifier = Modifier.padding(vertical = 16.dp))
                 ColumnTitleAndTextField(
                     title = "Keterangan ${kategoriState.kategori}",
@@ -342,17 +371,31 @@ fun TambahDataScreen(
                 Spacer(modifier = Modifier.padding(vertical = 16.dp))
                 ElevatedButton(
                     onClick = {
-                        viewModel.tambahPemasukan(
-                            TambahData(
-                                keterangan = jenisDataTextFieldValue.text,
-                                bukti ="",
-                                distributorId = distributorId,
-                                kategori = keteranganDataTextFieldValue.text,
-                                tgl = tglTextFieldValue.text,
-                                totalHarga = pemasukanTextFieldValue.text
-                            ),
-                            getRealPath(selectedImage!!, context)
-                        )
+                        if(kategoriState.kategori == "pemasukan") {
+                            viewModel.tambahPemasukan(
+                                TambahData(
+                                    keterangan = jenisDataTextFieldValue.text,
+                                    bukti ="",
+                                    distributorId = distributorId,
+                                    kategori = keteranganDataTextFieldValue.text,
+                                    tgl = tglTextFieldValue.text,
+                                    totalHarga = pemasukanTextFieldValue.text
+                                ),
+                                getRealPath(selectedImage!!, context)
+                            )
+                        } else {
+                            viewModel.tambahPengeluaran(
+                                TambahData(
+                                    keterangan = jenisDataTextFieldValue.text,
+                                    bukti ="",
+                                    distributorId = distributorId,
+                                    kategori = keteranganDataTextFieldValue.text,
+                                    tgl = tglTextFieldValue.text,
+                                    totalHarga = pemasukanTextFieldValue.text
+                                ),
+                                getRealPath(selectedImage!!, context)
+                            )
+                        }
                     },
                     content = {
                         Text(
@@ -387,7 +430,7 @@ fun TambahDataScreen(
         }
     }
 
-    if(distributorState.isLoading || tambahPemasukanState.loading) {
+    if(distributorState.isLoading || tambahPemasukanState.loading || tambahPengeluaranState.loading) {
         AlertDialog(
             onDismissRequest = {
 
@@ -417,7 +460,8 @@ fun TambahDataScreen(
         )
     }
 
-    if(tambahPemasukanState.message.isNotBlank() || distributorState.message.isNotBlank()){
+    if(tambahPemasukanState.message.isNotBlank() || distributorState.message.isNotBlank()
+        || tambahPengeluaranState.message.isNotBlank()){
         errorDialogShow = true
     }
 
@@ -430,7 +474,15 @@ fun TambahDataScreen(
                 Text(text = "Error")
             },
             text = {
-                Text(text = tambahPemasukanState.message)
+                if(distributorState.message.isNotBlank()){
+                    Text(text = distributorState.message)
+                } else {
+                    if(kategoriState.kategori == "pemasukan"){
+                        Text(text = tambahPemasukanState.message)
+                    } else {
+                        Text(text = tambahPengeluaranState.message)
+                    }
+                }
             },
             confirmButton = {
                 Text(
@@ -440,13 +492,14 @@ fun TambahDataScreen(
                             errorDialogShow = false
                             tambahPemasukanState.message = ""
                             distributorState.message = ""
+                            tambahPengeluaranState.message = ""
                         }
                 )
             }
         )
     }
 
-    if(tambahPemasukanState.isSuccess){
+    if(tambahPemasukanState.isSuccess || tambahPengeluaranState.isSuccess){
         successDialogShow = true
     }
 
@@ -471,7 +524,12 @@ fun TambahDataScreen(
                         .clickable {
                             successDialogShow = false
                             tambahPemasukanState.isSuccess = false
-                            pemasukanViewModel.getToken()
+                            tambahPengeluaranState.isSuccess = false
+                            if(kategoriState.kategori == "pemasukan"){
+                                pemasukanViewModel.getToken()
+                            } else {
+                                pengeluaranViewModel.getToken()
+                            }
                         }
                 )
             }

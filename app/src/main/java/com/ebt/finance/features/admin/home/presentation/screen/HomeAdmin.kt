@@ -1,6 +1,5 @@
 package com.ebt.finance.features.admin.home.presentation.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +42,7 @@ import com.ebt.finance.features.admin.pemasukan.presentation.screen.PemasukanScr
 import com.ebt.finance.features.admin.pemasukan.presentation.state.GetPemasukanState
 import com.ebt.finance.features.admin.pemasukan.presentation.viewmodel.PemasukanViewModel
 import com.ebt.finance.features.admin.pengeluaran.presentation.screen.PengeluaranScreen
+import com.ebt.finance.features.admin.pengeluaran.presentation.state.PengeluaranState
 import com.ebt.finance.features.admin.pengeluaran.presentation.viewmodel.PengeluaranViewModel
 import com.ebt.finance.ui.theme.Accent
 import com.ebt.finance.ui.theme.Primary
@@ -54,7 +54,8 @@ fun HomeAdmin(
     viewModel: HomeAdminViewModel = hiltViewModel(),
     pemasukanViewModel: PemasukanViewModel,
     pengeluaranViewModel: PengeluaranViewModel,
-    pemasukanState: GetPemasukanState
+    pemasukanState: GetPemasukanState,
+    pengeluaranState: PengeluaranState
 ) {
     var tabIndex by remember {
         mutableStateOf(0)
@@ -153,7 +154,11 @@ fun HomeAdmin(
                         navController = navController,
                         state = pemasukanState
                     )
-                    1 -> PengeluaranScreen(navController)
+                    1 -> PengeluaranScreen(
+                        navController,
+                        viewModel = pengeluaranViewModel,
+                        pengeluaranState = pengeluaranState,
+                    )
                 }
             }
         },
@@ -163,7 +168,7 @@ fun HomeAdmin(
                     if(tabIndex == 0){
                         navController.navigate("tambah_data/pemasukan")
                     } else {
-                        Log.e("beranda", "HomeAdmin: Pengeluarann", )
+                        navController.navigate("tambah_data/pengeluaran")
                     }
                 },
                 containerColor = Accent,

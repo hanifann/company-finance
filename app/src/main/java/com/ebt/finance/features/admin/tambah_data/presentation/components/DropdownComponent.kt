@@ -28,7 +28,9 @@ fun ExposedDropdownMenuBoxComponent(
     onClick: (DistributorData)-> Unit,
     isExpanded: Boolean,
     onExpandChange: (Boolean)-> Unit,
-    onDismiss: ()->Unit
+    onDismiss: ()->Unit,
+    placeholder: String = "Distributor",
+    isPemasukan: Boolean = true
 ) {
     Box(
         modifier = Modifier
@@ -66,7 +68,7 @@ fun ExposedDropdownMenuBoxComponent(
                 ),
                 placeholder = {
                     Text(
-                        text = "Distributor",
+                        text = placeholder,
                         color = Subtitle
                     )
                 },
@@ -77,12 +79,21 @@ fun ExposedDropdownMenuBoxComponent(
                 onDismissRequest = onDismiss,
             ) {
                 distributor.data.forEach { item ->
-                    DropdownMenuItem(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        text = { Text(text = item.namaDistributor) },
-                        onClick = {onClick(item)}
-                    )
+                    if(isPemasukan){
+                        DropdownMenuItem(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = { Text(text = item.namaDistributor) },
+                            onClick = {onClick(item)}
+                        )
+                    } else {
+                        DropdownMenuItem(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = { Text(text = item.jenisPengeluaran) },
+                            onClick = {onClick(item)}
+                        )
+                    }
                 }
             }
         }

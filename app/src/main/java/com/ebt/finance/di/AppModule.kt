@@ -42,6 +42,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.NumberFormat
+import java.time.Duration
 import javax.inject.Singleton
 
 
@@ -186,7 +187,10 @@ object AppModule {
                 OkHttpClient.Builder()
                     .addInterceptor(HttpLoggingInterceptor().apply {
                         level = HttpLoggingInterceptor.Level.BODY
-                    }).build()
+                    })
+                    .connectTimeout(Duration.ofSeconds(15))
+                    .writeTimeout(Duration.ofSeconds(15))
+                    .readTimeout(Duration.ofSeconds(15)).build()
             )
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(EitherCallAdapterFactory.create())

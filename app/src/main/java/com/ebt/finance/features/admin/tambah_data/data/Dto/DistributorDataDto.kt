@@ -8,23 +8,26 @@ data class DistributorDataDto(
     @SerializedName("id")
     val id: String,
     @SerializedName("nama_distributor")
-    val namaDistributor: String,
+    val namaDistributor: String?,
     @SerializedName("penjab")
-    val namaPenjab: String,
+    val namaPenjab: String?,
     @SerializedName("tlp")
-    val tlp: String,
+    val tlp: String?,
     @SerializedName("area_cover")
-    val areaCover: String,
+    val areaCover: String?,
     @SerializedName("alamat")
-    val alamat: String
+    val alamat: String?,
+    @SerializedName("jenis_pengeluaran")
+    val jenisPengeluaran: String?
 )
 
 fun DistributorDataDto.toDistributorData(): DistributorData = DistributorData(
     id,
-    namaDistributor,
-    namaPenjab,
-    tlp,
-    areaCover,
-    alamat
+    namaDistributor ?: "",
+    namaPenjab ?: "",
+    tlp ?: "",
+    areaCover ?: "",
+    alamat ?: "",
+    jenisPengeluaran ?: ""
 )
 

@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.ebt.finance.common.FailedDto
 import com.ebt.finance.features.admin.tambah_data.data.Dto.DistributorDto
 import com.ebt.finance.features.admin.tambah_data.data.Dto.TambahPemasukaDto
+import com.ebt.finance.features.admin.tambah_data.data.Dto.TambahPengeluaranDto
 import com.ebt.finance.features.admin.tambah_data.data.datasources.TambahDataRemoteDataSource
 import com.ebt.finance.features.admin.tambah_data.domain.model.TambahDataBody
 import com.ebt.finance.features.admin.tambah_data.domain.repositories.TambahDataRepository
@@ -31,14 +32,22 @@ class TambahDataRepositoryImpl @Inject constructor(
         )
     }
 
-//    override suspend fun postPengeluaran(token: String, data: TambahData): Either<FailedDto, Void> {
-//        return datasource.postPemasukan(
-//            jenisPemasukan = data.jenisData,
-//            keterangan = data.keterangan,
-//            tgl = data.tgl,
-//            totalPemasukan = data.totalHarga,
-//            bukti = data.bukti,
-//            token = token
-//        )
-//    }
+    override suspend fun postPengeluaran(
+        token: String,
+        data: TambahDataBody
+    ): Either<FailedDto, TambahPengeluaranDto> {
+        return datasource.postPengeluaran(
+            token = token,
+            jenisPemasukan = data.jenisData,
+            keterangan = data.keterangan,
+            totalPengeluaran = data.totalHarga,
+            tgl = data.tgl,
+            bukti = data.bukti,
+            distributorId = data.distributorId
+        )
+    }
+
+    override suspend fun getJenisPengeluaran(token: String): Either<FailedDto, DistributorDto> {
+        return datasource.getJenisPengeluaran(token)
+    }
 }

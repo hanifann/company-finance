@@ -13,10 +13,14 @@ import com.ebt.finance.common.Resource
 import com.ebt.finance.features.admin.tambah_data.domain.model.TambahData
 import com.ebt.finance.features.admin.tambah_data.domain.model.TambahDataBody
 import com.ebt.finance.features.admin.tambah_data.domain.use_cases.GetDistributor
+import com.ebt.finance.features.admin.tambah_data.domain.use_cases.GetJenisPengeluaran
+import com.ebt.finance.features.admin.tambah_data.domain.use_cases.PostPengeluaranUseCase
 import com.ebt.finance.features.admin.tambah_data.domain.use_cases.PostTambahPemasukan
 import com.ebt.finance.features.admin.tambah_data.presentation.states.DistributorState
+import com.ebt.finance.features.admin.tambah_data.presentation.states.JenisPengeluaranState
 import com.ebt.finance.features.admin.tambah_data.presentation.states.KategoriState
 import com.ebt.finance.features.admin.tambah_data.presentation.states.TambahPemasukanState
+import com.ebt.finance.features.admin.tambah_data.presentation.states.TambahPengeluaranState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -31,7 +35,9 @@ class TambahDataViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val dataStore: DataStoreRepository,
     private val getDistributorUseCase: GetDistributor,
-    private val postPemasukanUseCase: PostTambahPemasukan
+    private val postPemasukanUseCase: PostTambahPemasukan,
+    private val postPengeluaranUseCase: PostPengeluaranUseCase,
+    private val getJenisPengeluaranUseCase: GetJenisPengeluaran
 ): ViewModel() {
 
     private val _kategoriState = mutableStateOf(KategoriState())
@@ -43,11 +49,24 @@ class TambahDataViewModel @Inject constructor(
     private val _tambahPemasukanState = mutableStateOf(TambahPemasukanState())
     val tambahPemasukanState: State<TambahPemasukanState> = _tambahPemasukanState
 
+    private val _tambahPengeluaranState = mutableStateOf(TambahPengeluaranState())
+    val tambahPengeluaranState: State<TambahPengeluaranState> = _tambahPengeluaranState
+
+    private val _jenisPengeluaranState = mutableStateOf(JenisPengeluaranState())
+    val jenisPengeluaranState: State<JenisPengeluaranState> = _jenisPengeluaranState
+
     init {
         savedStateHandle.get<String>(Constant.PARAM_KATEGORI)?.let {
             _kategoriState.value = KategoriState(it)
+            if(_kategoriState.value.kategori.isNotBlank()){
+                if (_kategoriState.value.kategori == "pemasukan"){
+                    getDistributor()
+                } else {
+                    getJenisPengeluaran()
+                }
+            }
         }
-        getDistributor()
+
     }
 
     private fun getDistributor() {
@@ -115,6 +134,76 @@ class TambahDataViewModel @Inject constructor(
                                 }
 
 
+                            }
+                        }
+                }
+            }
+        }
+    }
+
+    fun tambahPengeluaran(data: TambahData, file: File) {
+        viewModelScope.launch {
+            _tambahPengeluaranState.value = TambahPengeluaranState(true)
+            dataStore.getData(stringPreferencesKey(R.string.TOKEN_KEY.toString())).collect{ token ->
+
+                val requestImage = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                val jenisPemasukan =
+                    data.kategori.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                val keterangan =
+                    data.keterangan.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                val tgl = data.tgl.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                val totalPemasukan =
+                    data.totalHarga.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                val buktiPemasukan =
+                    MultipartBody.Part.createFormData("bukti_pengeluaran", file.name, requestImage)
+                val distributorId =
+                    data.distributorId.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+                if(token.isNotBlank()){
+                    postPengeluaranUseCase
+                        .invoke("Bearer $token", TambahDataBody(
+                            bukti = buktiPemasukan,
+                            distributorId = distributorId,
+                            jenisData = jenisPemasukan,
+                            keterangan = keterangan,
+                            tgl = tgl,
+                            totalHarga = totalPemasukan
+                        ))
+                        .collect{
+                            when(it) {
+                                is Resource.Loading -> {
+                                    _tambahPengeluaranState.value = TambahPengeluaranState(true)
+                                }
+                                is Resource.Success -> {
+                                    _tambahPengeluaranState.value = TambahPengeluaranState(data = it.data!!, isSuccess = true)
+                                }
+                                is Resource.Error -> {
+                                    _tambahPengeluaranState.value = TambahPengeluaranState(message = it.message.toString())
+                                }
+                            }
+                        }
+                }
+            }
+        }
+    }
+
+    private fun getJenisPengeluaran() {
+        viewModelScope.launch {
+            _jenisPengeluaranState.value = JenisPengeluaranState(isLoading = true)
+            dataStore.getData(stringPreferencesKey(R.string.TOKEN_KEY.toString())).collect{ token ->
+                if(token.isNotBlank()){
+                    getJenisPengeluaranUseCase
+                        .invoke("Bearer $token")
+                        .collect{
+                            when (it) {
+                                is Resource.Success -> {
+                                    _jenisPengeluaranState.value = JenisPengeluaranState(data = it.data!!)
+                                }
+                                is Resource.Loading -> {
+                                    _jenisPengeluaranState.value = JenisPengeluaranState(isLoading = true)
+                                }
+                                is Resource.Error -> {
+                                    _jenisPengeluaranState.value = JenisPengeluaranState(message = it.message.toString())
+                                }
                             }
                         }
                 }

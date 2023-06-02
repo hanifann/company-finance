@@ -29,9 +29,9 @@ class GetPengeluaranUseCase @Inject constructor(
                     emit(Resource.Success(data = it.toPengeluaran()))
                 }
             )
-        } catch (e: HttpException){
+        } catch (e: IOException){
             emit(Resource.Error(e.localizedMessage ?: "something went wrong"))
-        } catch (e: IOException) {
+        } catch (e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "something went wrong"))
         }
     }
