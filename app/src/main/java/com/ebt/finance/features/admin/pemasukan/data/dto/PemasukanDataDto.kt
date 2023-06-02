@@ -20,7 +20,9 @@ data class PemasukanDataDto(
     @JsonProperty("bukti_pemasukan")
     val buktiPemasukan: String?,
     @JsonProperty("updated_at")
-    val updatedAt: String?
+    val updatedAt: String?,
+    @JsonProperty("distributor_id")
+    val distributorId: String?
 )
 
 fun PemasukanDataDto.toPemasukanData(): PemasukanData = PemasukanData(
@@ -30,5 +32,6 @@ fun PemasukanDataDto.toPemasukanData(): PemasukanData = PemasukanData(
     tgl ?: "",
     totalPemasukan ?: "",
     buktiPemasukan ?: "",
-    updatedAt ?: ""
+    updatedAt ?: "",
+    distributorId ?: ""
 )

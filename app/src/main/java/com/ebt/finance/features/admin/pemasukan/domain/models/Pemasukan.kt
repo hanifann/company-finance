@@ -11,7 +11,8 @@ data class PemasukanData (
     val tgl: String,
     val totalPemasukan: String,
     val buktiPemasukan: String,
-    val updatedAt: String
+    val updatedAt: String,
+    val distributorId: String
 )
 
 
