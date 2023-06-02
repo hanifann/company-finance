@@ -2,10 +2,12 @@ package com.ebt.finance.features.admin.tambah_data.data.Dto
 
 
 import com.ebt.finance.features.admin.tambah_data.domain.model.Tambah
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class TambahPemasukaDto(
-    @SerializedName("data")
+    @JsonProperty("data")
     val `data`: TambahPemasukanData
 )
 

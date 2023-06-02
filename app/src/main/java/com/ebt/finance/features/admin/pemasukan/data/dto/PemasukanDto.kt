@@ -2,10 +2,12 @@ package com.ebt.finance.features.admin.pemasukan.data.dto
 
 
 import com.ebt.finance.features.admin.pemasukan.domain.models.Pemasukan
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class PemasukanDto(
-    @SerializedName("data")
+    @JsonProperty("data")
     val `data`: List<PemasukanDataDto>
 )
 

@@ -2,32 +2,34 @@ package com.ebt.finance.features.login.data.dto
 
 
 import com.ebt.finance.features.login.domain.models.UserData
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class UserDataDto(
-    @SerializedName("id")
+    @JsonProperty("id")
     val id: Int,
-    @SerializedName("name")
+    @JsonProperty("name")
     val name: String,
-    @SerializedName("email")
+    @JsonProperty("email")
     val email: String,
-    @SerializedName("no_identitas")
+    @JsonProperty("no_identitas")
     val noIdentitas: String,
-    @SerializedName("tempat_lahir")
+    @JsonProperty("tempat_lahir")
     val tempatLahir: String,
-    @SerializedName("tgl_lahir")
+    @JsonProperty("tgl_lahir")
     val tglLahir: String,
-    @SerializedName("no_rek")
+    @JsonProperty("no_rek")
     val noRek: String,
-    @SerializedName("role_id")
+    @JsonProperty("role_id")
     val roleId: String,
-    @SerializedName("posisi_id")
+    @JsonProperty("posisi_id")
     val posisiId: String,
-    @SerializedName("status")
+    @JsonProperty("status")
     val status: String,
-    @SerializedName("domisili")
+    @JsonProperty("domisili")
     val domisili: String,
-    @SerializedName("no_tlp")
+    @JsonProperty("no_tlp")
     val noTlp: String
 )
 

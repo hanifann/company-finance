@@ -11,6 +11,9 @@ import arrow.retrofit.adapter.either.EitherCallAdapterFactory
 import com.ebt.finance.common.Constant
 import com.ebt.finance.common.DataStoreRepository
 import com.ebt.finance.common.DataStoreRepositoryImpl
+import com.ebt.finance.features.admin.edit_data.data.data_sources.UpdateDataRemoteDataSource
+import com.ebt.finance.features.admin.edit_data.data.repositories.UpdateDataRepositoryImpl
+import com.ebt.finance.features.admin.edit_data.domain.repositories.UpdateDataRepository
 import com.ebt.finance.features.admin.pemasukan.data.datasources.PemasukanRemoteDataSource
 import com.ebt.finance.features.admin.pemasukan.data.repositories.PemasukanRepositoryImpl
 import com.ebt.finance.features.admin.pemasukan.domain.repositories.PemasukanRepository
@@ -40,7 +43,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.jackson.JacksonConverterFactory
 import java.text.NumberFormat
 import java.time.Duration
 import javax.inject.Singleton
@@ -63,7 +66,7 @@ object AppModule {
                         level = HttpLoggingInterceptor.Level.BODY
                     }).build()
             )
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(JacksonConverterFactory.create())
             .addCallAdapterFactory(EitherCallAdapterFactory.create())
             .build()
             .create(LoginRemoteDataSource::class.java)
@@ -89,7 +92,7 @@ object AppModule {
                         level = HttpLoggingInterceptor.Level.BODY
                     }).build()
             )
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(JacksonConverterFactory.create())
             .addCallAdapterFactory(EitherCallAdapterFactory.create())
             .build()
             .create(PemasukanRemoteDataSource::class.java)
@@ -114,7 +117,7 @@ object AppModule {
                         level = HttpLoggingInterceptor.Level.BODY
                     }).build()
             )
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(JacksonConverterFactory.create())
             .addCallAdapterFactory(EitherCallAdapterFactory.create())
             .build()
             .create(PemasukanDetailRemoteDataSource::class.java)
@@ -139,7 +142,7 @@ object AppModule {
                         level = HttpLoggingInterceptor.Level.BODY
                     }).build()
             )
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(JacksonConverterFactory.create())
             .addCallAdapterFactory(EitherCallAdapterFactory.create())
             .build()
             .create(PengeluaranRemoteDataSource::class.java)
@@ -164,7 +167,7 @@ object AppModule {
                         level = HttpLoggingInterceptor.Level.BODY
                     }).build()
             )
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(JacksonConverterFactory.create())
             .addCallAdapterFactory(EitherCallAdapterFactory.create())
             .build()
             .create(PengeluaranDetailRemoteDataSource::class.java)
@@ -192,7 +195,7 @@ object AppModule {
                     .writeTimeout(Duration.ofSeconds(15))
                     .readTimeout(Duration.ofSeconds(15)).build()
             )
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(JacksonConverterFactory.create())
             .addCallAdapterFactory(EitherCallAdapterFactory.create())
             .build()
             .create(TambahDataRemoteDataSource::class.java)
@@ -200,8 +203,31 @@ object AppModule {
     //repository
     @Provides
     @Singleton
-    fun ProvideTambahDataRespotiroy(dataSource: TambahDataRemoteDataSource): TambahDataRepository {
+    fun provideTambahDataRespotiroy(dataSource: TambahDataRemoteDataSource): TambahDataRepository {
         return TambahDataRepositoryImpl(dataSource)
+    }
+
+    //update_data
+    //data_source
+    @Provides
+    @Singleton
+    fun provideUpdateDataRemoteDataSource(): UpdateDataRemoteDataSource {
+        return Retrofit.Builder()
+            .baseUrl(Constant.BASE_URL)
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }).build()
+            )
+            .addConverterFactory(JacksonConverterFactory.create())
+            .addCallAdapterFactory(EitherCallAdapterFactory.create())
+            .build()
+            .create(UpdateDataRemoteDataSource::class.java)
+    }
+    //repository
+    fun provideUpdateDataRepository(dataSource: UpdateDataRemoteDataSource): UpdateDataRepository {
+        return UpdateDataRepositoryImpl(dataSource)
     }
 
 

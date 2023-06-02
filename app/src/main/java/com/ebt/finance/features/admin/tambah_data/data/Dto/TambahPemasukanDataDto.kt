@@ -2,24 +2,26 @@ package com.ebt.finance.features.admin.tambah_data.data.Dto
 
 
 import com.ebt.finance.features.admin.tambah_data.domain.model.TambahData
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class TambahPemasukanData(
-    @SerializedName("distributor_id")
+    @JsonProperty("distributor_id")
     val distributorId: String,
-    @SerializedName("keterangan")
+    @JsonProperty("keterangan")
     val keterangan: String,
-    @SerializedName("tgl")
+    @JsonProperty("tgl")
     val tgl: String,
-    @SerializedName("total_pemasukan")
+    @JsonProperty("total_pemasukan")
     val totalPemasukan: String,
-    @SerializedName("bukti_pemasukan")
+    @JsonProperty("bukti_pemasukan")
     val buktiPemasukan: String,
-    @SerializedName("updated_at")
+    @JsonProperty("updated_at")
     val updatedAt: String,
-    @SerializedName("created_at")
+    @JsonProperty("created_at")
     val createdAt: String,
-    @SerializedName("id")
+    @JsonProperty("id")
     val id: Int
 )
 

@@ -2,22 +2,24 @@ package com.ebt.finance.features.admin.tambah_data.data.Dto
 
 
 import com.ebt.finance.features.admin.tambah_data.domain.model.DistributorData
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class DistributorDataDto(
-    @SerializedName("id")
+    @JsonProperty("id")
     val id: String,
-    @SerializedName("nama_distributor")
+    @JsonProperty("nama_distributor")
     val namaDistributor: String?,
-    @SerializedName("penjab")
+    @JsonProperty("penjab")
     val namaPenjab: String?,
-    @SerializedName("tlp")
+    @JsonProperty("tlp")
     val tlp: String?,
-    @SerializedName("area_cover")
+    @JsonProperty("area_cover")
     val areaCover: String?,
-    @SerializedName("alamat")
+    @JsonProperty("alamat")
     val alamat: String?,
-    @SerializedName("jenis_pengeluaran")
+    @JsonProperty("jenis_pengeluaran")
     val jenisPengeluaran: String?
 )
 
