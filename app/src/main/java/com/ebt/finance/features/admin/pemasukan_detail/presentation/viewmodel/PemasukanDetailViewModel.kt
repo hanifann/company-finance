@@ -10,6 +10,7 @@ import com.ebt.finance.R
 import com.ebt.finance.common.Constant
 import com.ebt.finance.common.DataStoreRepository
 import com.ebt.finance.common.Resource
+import com.ebt.finance.features.admin.pemasukan.domain.models.PemasukanData
 import com.ebt.finance.features.admin.pemasukan_detail.domain.use_case.DeletePemasukanUseCase
 import com.ebt.finance.features.admin.pemasukan_detail.domain.use_case.GetPemasukanDetailUseCase
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.state.DeletePemasukanState
@@ -131,6 +132,10 @@ class PemasukanDetailViewModel @Inject constructor(
 
     fun toJson(image: ImageViewer): String {
         return gson.toJson(image)
+    }
+
+    fun paramToJson(pemasukan: PemasukanData): String{
+        return gson.toJson(pemasukan)
     }
 
 }
