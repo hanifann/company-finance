@@ -8,4 +8,5 @@ sealed class Route (val route: String) {
     object PengeluaranDetailScreen: Route("expanse_detail")
     object ImageViewerScreen: Route("image_viewer")
     object TambahDataScreen: Route("tambah_data")
+    object UpdateDataScreen: Route("update_data")
 }

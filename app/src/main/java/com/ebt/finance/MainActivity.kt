@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ebt.finance.common.Constant
+import com.ebt.finance.features.admin.edit_data.presentation.screen.UpdateDataScreen
 import com.ebt.finance.features.admin.home.presentation.screen.HomeAdmin
 import com.ebt.finance.features.admin.pemasukan.presentation.viewmodel.PemasukanViewModel
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.screen.PemasukanDetailScreen
@@ -90,6 +91,15 @@ class MainActivity : ComponentActivity() {
                             route = Route.TambahDataScreen.route + "/{${Constant.PARAM_KATEGORI}}"
                         ) {
                             TambahDataScreen(
+                                navController = navController,
+                                pemasukanViewModel = pemasukanViewModel,
+                                pengeluaranViewModel = pengeluaranViewModel
+                            )
+                        }
+                        composable(
+                            route = Route.UpdateDataScreen.route + "/{${Constant.PARAM_KATEGORI}}/{${Constant.PARAM_DATA}}"
+                        ){
+                            UpdateDataScreen(
                                 navController = navController,
                                 pemasukanViewModel = pemasukanViewModel,
                                 pengeluaranViewModel = pengeluaranViewModel
