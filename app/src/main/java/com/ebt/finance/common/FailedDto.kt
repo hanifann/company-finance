@@ -1,10 +1,12 @@
 package com.ebt.finance.common
 
 
-import com.google.gson.annotations.SerializedName
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class FailedDto(
-    @SerializedName("message")
+    @JsonProperty("message")
     val message: String?
 )
 
