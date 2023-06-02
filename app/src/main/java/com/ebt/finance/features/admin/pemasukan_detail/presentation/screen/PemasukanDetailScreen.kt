@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.ebt.finance.R
 import com.ebt.finance.common.Constant
+import com.ebt.finance.features.admin.pemasukan.domain.models.PemasukanData
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.components.RowTextAndValueComponent
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.viewmodel.PemasukanDetailViewModel
 import com.ebt.finance.features.image_viewer.presentation.domain.ImageViewer
@@ -255,7 +256,25 @@ fun PemasukanDetailScreen(
             )
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
             OutlinedButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navController.navigate(
+                        "update_data/pemasukan/${
+                            viewModel.paramToJson(
+                                PemasukanData(
+                                    id = state.data.data[0].id,
+                                    buktiPemasukan = state.data.data[0].buktiPemasukan,
+                                    distributorId = state.data.data[0].distributorId,
+                                    keterangan = state.data.data[0].keterangan,
+                                    namaDistributor = disState.distributor,
+                                    tgl = state.data.data[0].tgl,
+                                    totalPemasukan = state.data.data[0].totalPemasukan,
+                                    updatedAt = state.data.data[0].updatedAt
+
+                                )
+                            )
+                        }"
+                    )
+                },
                 shape = RoundedCornerShape(8.dp),
                 border = BorderStroke(
                     1.dp,
