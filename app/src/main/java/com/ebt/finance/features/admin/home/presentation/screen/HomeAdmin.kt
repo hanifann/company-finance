@@ -57,6 +57,7 @@ fun HomeAdmin(
     pemasukanState: GetPemasukanState,
     pengeluaranState: PengeluaranState
 ) {
+    val userDataState = viewModel.userDataState.value
     var tabIndex by remember {
         mutableStateOf(0)
     }
@@ -163,24 +164,26 @@ fun HomeAdmin(
             }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    if(tabIndex == 0){
-                        navController.navigate("tambah_data/pemasukan")
-                    } else {
-                        navController.navigate("tambah_data/pengeluaran")
+            if(userDataState.userData.roleId == "1"){
+                FloatingActionButton(
+                    onClick = {
+                        if(tabIndex == 0){
+                            navController.navigate("tambah_data/pemasukan")
+                        } else {
+                            navController.navigate("tambah_data/pengeluaran")
+                        }
+                    },
+                    containerColor = Accent,
+                    shape = CircleShape,
+                    content = {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "add",
+                            tint = Color.White
+                        )
                     }
-                },
-                containerColor = Accent,
-                shape = CircleShape,
-                content = {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "add",
-                        tint = Color.White
-                    )
-                }
-            )
+                )
+            }
         }
     )
 
