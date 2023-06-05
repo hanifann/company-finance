@@ -24,9 +24,6 @@ class PengeluaranViewModel @Inject constructor(
 ): ViewModel() {
     private val _state = mutableStateOf(PengeluaranState())
     val state: State<PengeluaranState> = _state
-    init {
-        getToken()
-    }
 
     private fun getPengeluaran(token: String) {
         viewModelScope.launch {
