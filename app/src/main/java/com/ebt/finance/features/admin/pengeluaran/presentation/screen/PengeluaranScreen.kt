@@ -15,10 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import com.ebt.finance.R
+import com.ebt.finance.common.OnLifecycleEvent
 import com.ebt.finance.features.admin.pemasukan.presentation.components.ContainerPemasukanComponent
-import com.ebt.finance.features.admin.pengeluaran.presentation.state.PengeluaranState
 import com.ebt.finance.features.admin.pengeluaran.presentation.viewmodel.PengeluaranViewModel
 import com.ebt.finance.ui.theme.Accent
 import com.ebt.finance.ui.theme.Primary
@@ -26,10 +28,16 @@ import com.ebt.finance.ui.theme.Primary
 @Composable
 fun PengeluaranScreen(
     navController: NavController,
-    viewModel: PengeluaranViewModel,
-    pengeluaranState: PengeluaranState
+    viewModel: PengeluaranViewModel = hiltViewModel(),
 ) {
+    val pengeluaranState = viewModel.state.value
 
+    OnLifecycleEvent{ _, event ->
+        when(event) {
+            Lifecycle.Event.ON_START -> viewModel.getToken()
+            else -> {}
+        }
+    }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
