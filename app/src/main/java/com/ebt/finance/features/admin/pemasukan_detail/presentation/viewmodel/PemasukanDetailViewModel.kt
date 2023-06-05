@@ -16,7 +16,9 @@ import com.ebt.finance.features.admin.pemasukan_detail.domain.use_case.GetPemasu
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.state.DeletePemasukanState
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.state.DistributorState
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.state.PemasukanDetailState
+import com.ebt.finance.features.auth.presentation.state.UserDataState
 import com.ebt.finance.features.image_viewer.presentation.domain.ImageViewer
+import com.ebt.finance.features.login.domain.models.UserData
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -43,7 +45,11 @@ class PemasukanDetailViewModel @Inject constructor(
     private val _delState = mutableStateOf(DeletePemasukanState())
     val delState: State<DeletePemasukanState> = _delState
 
+    private val _userDataState = mutableStateOf(UserDataState())
+    val userDataState: State<UserDataState> = _userDataState
+
     init {
+        getUserData()
         savedStateHandle.get<String>(Constant.PARAM_DISTRIBUTOR)?.let {
             _disState.value = DistributorState(it)
         }
@@ -119,6 +125,18 @@ class PemasukanDetailViewModel @Inject constructor(
                     getDetailPemasukan(id, "Bearer $it")
                 } else {
                     _state.value = PemasukanDetailState(isLoading = true)
+                }
+            }
+        }
+    }
+
+    private fun getUserData(){
+        viewModelScope.launch {
+            dataStore.getData(stringPreferencesKey(R.string.USER_DATA_KEY.toString())).collect{
+                if(it.isNotBlank()){
+                    _userDataState.value = UserDataState(
+                        userData = gson.fromJson(it, UserData::class.java)
+                    )
                 }
             }
         }

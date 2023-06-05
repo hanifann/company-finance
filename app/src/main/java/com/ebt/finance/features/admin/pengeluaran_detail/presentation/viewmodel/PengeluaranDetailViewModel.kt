@@ -15,6 +15,9 @@ import com.ebt.finance.features.admin.pengeluaran_detail.domain.use_case.GetPeng
 import com.ebt.finance.features.admin.pengeluaran_detail.presentation.state.DeletePengeluaranState
 import com.ebt.finance.features.admin.pengeluaran_detail.presentation.state.JenisPengeluaranState
 import com.ebt.finance.features.admin.pengeluaran_detail.presentation.state.PengeluaranDetailState
+import com.ebt.finance.features.auth.presentation.state.UserDataState
+import com.ebt.finance.features.login.domain.models.UserData
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
@@ -27,7 +30,8 @@ class PengeluaranDetailViewModel @Inject constructor(
     private val deletePengeluaranUseCase: DeletePengeluaranUseCase,
     private val savedStateHandle: SavedStateHandle,
     private val dataStore: DataStoreRepository,
-    private val formatter: NumberFormat
+    private val formatter: NumberFormat,
+    private val gson: Gson
 ): ViewModel(){
 
     private val _state = mutableStateOf(PengeluaranDetailState())
@@ -39,7 +43,11 @@ class PengeluaranDetailViewModel @Inject constructor(
     private val _deletePengeluaranState = mutableStateOf(DeletePengeluaranState())
     val deletePengeluaranState: State<DeletePengeluaranState> = _deletePengeluaranState
 
+    private val _userDataState = mutableStateOf(UserDataState())
+    val userDataState: State<UserDataState> = _userDataState
+
     init {
+        getUserData()
         savedStateHandle.get<String>(Constant.PARAM_JENIS_PENGELUARAN)?.let {
             _jenisPengeluaranState.value = JenisPengeluaranState(it)
         }
@@ -106,6 +114,18 @@ class PengeluaranDetailViewModel @Inject constructor(
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    private fun getUserData(){
+        viewModelScope.launch {
+            dataStore.getData(stringPreferencesKey(R.string.USER_DATA_KEY.toString())).collect{
+                if(it.isNotBlank()){
+                    _userDataState.value = UserDataState(
+                        userData = gson.fromJson(it, UserData::class.java)
+                    )
                 }
             }
         }

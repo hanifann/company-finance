@@ -61,6 +61,7 @@ fun PengeluaranDetailScreen(
     val state = viewModel.state.value
     val disState = viewModel.jenisPengeluaranState.value
     val deleteState = viewModel.deletePengeluaranState.value
+    val userDataState = viewModel.userDataState.value
 
     var isImageError by remember {
         mutableStateOf(false)
@@ -220,43 +221,47 @@ fun PengeluaranDetailScreen(
                     )
                 }
             }
-            OutlinedButton(
-                onClick = { deleteDialog = true },
-                shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(
-                    1.dp,
-                    Color.Red
-                ),
-                content = {
-                    Text(
-                        text = "Hapus pengeluaran",
-                        color = Color.Red,
-                        fontWeight = FontWeight(500)
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            )
+            if(userDataState.userData.roleId == "1"){
+                OutlinedButton(
+                    onClick = { deleteDialog = true },
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(
+                        1.dp,
+                        Color.Red
+                    ),
+                    content = {
+                        Text(
+                            text = "Hapus pengeluaran",
+                            color = Color.Red,
+                            fontWeight = FontWeight(500)
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                )
+            }
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
-            OutlinedButton(
-                onClick = {  },
-                shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(
-                    1.dp,
-                    Accent
-                ),
-                content = {
-                    Text(
-                        text = "Edit pengeluaran",
-                        color = Accent,
-                        fontWeight = FontWeight(500)
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            )
+            if(userDataState.userData.roleId == "1"){
+                OutlinedButton(
+                    onClick = {  },
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(
+                        1.dp,
+                        Accent
+                    ),
+                    content = {
+                        Text(
+                            text = "Edit pengeluaran",
+                            color = Accent,
+                            fontWeight = FontWeight(500)
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                )
+            }
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
             ElevatedButton(
                 onClick = {

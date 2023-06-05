@@ -63,6 +63,7 @@ fun PemasukanDetailScreen(
     val state = viewModel.state.value
     val disState = viewModel.disState.value
     val delState = viewModel.delState.value
+    val userDataState = viewModel.userDataState.value
 
     var isImageError by remember { mutableStateOf(false) }
     var errorDialog by remember { mutableStateOf(false) }
@@ -236,61 +237,65 @@ fun PemasukanDetailScreen(
                     )
                 }
             }
-            OutlinedButton(
-                onClick = { delDialog = true },
-                shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(
-                    1.dp,
-                    Color.Red
-                ),
-                content = {
-                    Text(
-                        text = "Hapus pemasukan",
-                        color = Color.Red,
-                        fontWeight = FontWeight(500)
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            )
+            if(userDataState.userData.roleId == "1"){
+                OutlinedButton(
+                    onClick = { delDialog = true },
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(
+                        1.dp,
+                        Color.Red
+                    ),
+                    content = {
+                        Text(
+                            text = "Hapus pemasukan",
+                            color = Color.Red,
+                            fontWeight = FontWeight(500)
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                )
+            }
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
-            OutlinedButton(
-                onClick = {
-                    navController.navigate(
-                        "update_data/pemasukan/${
-                            viewModel.paramToJson(
-                                PemasukanData(
-                                    id = state.data.data[0].id,
-                                    buktiPemasukan = state.data.data[0].buktiPemasukan,
-                                    distributorId = state.data.data[0].distributorId,
-                                    keterangan = state.data.data[0].keterangan,
-                                    namaDistributor = disState.distributor,
-                                    tgl = state.data.data[0].tgl,
-                                    totalPemasukan = state.data.data[0].totalPemasukan,
-                                    updatedAt = state.data.data[0].updatedAt
+            if(userDataState.userData.roleId == "1"){
+                OutlinedButton(
+                    onClick = {
+                        navController.navigate(
+                            "update_data/pemasukan/${
+                                viewModel.paramToJson(
+                                    PemasukanData(
+                                        id = state.data.data[0].id,
+                                        buktiPemasukan = state.data.data[0].buktiPemasukan,
+                                        distributorId = state.data.data[0].distributorId,
+                                        keterangan = state.data.data[0].keterangan,
+                                        namaDistributor = disState.distributor,
+                                        tgl = state.data.data[0].tgl,
+                                        totalPemasukan = state.data.data[0].totalPemasukan,
+                                        updatedAt = state.data.data[0].updatedAt
 
+                                    )
                                 )
-                            )
-                        }"
-                    )
-                },
-                shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(
-                    1.dp,
-                    Accent
-                ),
-                content = {
-                    Text(
-                        text = "Edit pemasukan",
-                        color = Accent,
-                        fontWeight = FontWeight(500)
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            )
+                            }"
+                        )
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(
+                        1.dp,
+                        Accent
+                    ),
+                    content = {
+                        Text(
+                            text = "Edit pemasukan",
+                            color = Accent,
+                            fontWeight = FontWeight(500)
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                )
+            }
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
             ElevatedButton(
                 onClick = {
