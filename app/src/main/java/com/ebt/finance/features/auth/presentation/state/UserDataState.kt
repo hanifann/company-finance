@@ -18,5 +18,6 @@ data class UserDataState(
         "",
         ""
     ),
-    val message: String =""
+    val message: String ="",
+    val isSuccess: Boolean = false
 )

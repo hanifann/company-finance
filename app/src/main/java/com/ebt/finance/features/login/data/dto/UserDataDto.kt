@@ -12,40 +12,40 @@ data class UserDataDto(
     @JsonProperty("name")
     val name: String,
     @JsonProperty("email")
-    val email: String,
+    val email: String?,
     @JsonProperty("no_identitas")
-    val noIdentitas: String,
+    val noIdentitas: String?,
     @JsonProperty("tempat_lahir")
-    val tempatLahir: String,
+    val tempatLahir: String?,
     @JsonProperty("tgl_lahir")
-    val tglLahir: String,
+    val tglLahir: String?,
     @JsonProperty("no_rek")
-    val noRek: String,
+    val noRek: String?,
     @JsonProperty("role_id")
-    val roleId: String,
+    val roleId: String?,
     @JsonProperty("posisi_id")
-    val posisiId: String,
+    val posisiId: String?,
     @JsonProperty("status")
-    val status: String,
+    val status: String?,
     @JsonProperty("domisili")
-    val domisili: String,
+    val domisili: String?,
     @JsonProperty("no_tlp")
-    val noTlp: String
+    val noTlp: String?
 )
 
 fun UserDataDto.toUserData(): UserData {
     return UserData(
         id,
         name,
-        email,
-        noIdentitas,
-        tempatLahir,
-        tglLahir,
-        noRek,
-        roleId,
-        posisiId,
-        status,
-        domisili,
-        noTlp
+        email ?: "",
+        noIdentitas ?: "",
+        tempatLahir ?: "",
+        tglLahir ?: "",
+        noRek ?: "",
+        roleId ?: "",
+        posisiId ?: "",
+        status ?: "",
+        domisili ?: "",
+        noTlp ?: ""
     )
 }
