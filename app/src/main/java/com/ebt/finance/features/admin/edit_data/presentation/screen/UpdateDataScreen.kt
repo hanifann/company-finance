@@ -45,8 +45,6 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.ebt.finance.common.Constant
 import com.ebt.finance.features.admin.edit_data.presentation.viewmodels.UpdateDataViewModel
-import com.ebt.finance.features.admin.pemasukan.presentation.viewmodel.PemasukanViewModel
-import com.ebt.finance.features.admin.pengeluaran.presentation.viewmodel.PengeluaranViewModel
 import com.ebt.finance.features.admin.tambah_data.domain.model.TambahData
 import com.ebt.finance.features.admin.tambah_data.presentation.components.ColumnTitleAndTextField
 import com.ebt.finance.features.admin.tambah_data.presentation.components.ExposedDropdownMenuBoxComponent
@@ -67,8 +65,6 @@ import java.time.format.DateTimeFormatter
 fun UpdateDataScreen(
     viewModel: UpdateDataViewModel = hiltViewModel(),
     navController: NavController,
-    pemasukanViewModel: PemasukanViewModel,
-    pengeluaranViewModel: PengeluaranViewModel
 ) {
 
     val kategoriState = viewModel.kategoriState.value
@@ -421,12 +417,10 @@ fun UpdateDataScreen(
                             updatePemasukanState.isSuccess = false
                             updatehPengeluaranState.isSuccess = false
                             if(kategoriState.kategori == "pemasukan"){
-                                pemasukanViewModel.getToken()
                                 navController.navigate("auth_screen"){
                                     popUpTo(0)
                                 }
                             } else {
-                                pengeluaranViewModel.getToken()
                                 navController.navigate("auth_screen"){
                                     popUpTo(0)
                                 }
