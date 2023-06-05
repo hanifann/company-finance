@@ -10,6 +10,7 @@ import com.ebt.finance.R
 import com.ebt.finance.common.Constant
 import com.ebt.finance.common.DataStoreRepository
 import com.ebt.finance.common.Resource
+import com.ebt.finance.features.admin.pemasukan.domain.models.PemasukanData
 import com.ebt.finance.features.admin.pengeluaran_detail.domain.use_case.DeletePengeluaranUseCase
 import com.ebt.finance.features.admin.pengeluaran_detail.domain.use_case.GetPengeluaranDetailUseCase
 import com.ebt.finance.features.admin.pengeluaran_detail.presentation.state.DeletePengeluaranState
@@ -135,5 +136,9 @@ class PengeluaranDetailViewModel @Inject constructor(
         formatter.maximumFractionDigits = 0
         formatter.currency = Currency.getInstance("IDR")
         return formatter.format(value)
+    }
+
+    fun paramToJson(pemasukan: PemasukanData): String{
+        return gson.toJson(pemasukan)
     }
 }

@@ -16,7 +16,6 @@ import com.ebt.finance.features.admin.edit_data.domain.usecases.PutPengeluaranUs
 import com.ebt.finance.features.admin.edit_data.presentation.states.UpdatePemasukanState
 import com.ebt.finance.features.admin.edit_data.presentation.states.UpdatePengeluaranState
 import com.ebt.finance.features.admin.pemasukan.domain.models.PemasukanData
-import com.ebt.finance.features.admin.pengeluaran.domain.models.PengeluaranData
 import com.ebt.finance.features.admin.tambah_data.domain.model.TambahData
 import com.ebt.finance.features.admin.tambah_data.domain.use_cases.GetDistributor
 import com.ebt.finance.features.admin.tambah_data.domain.use_cases.GetJenisPengeluaran
@@ -84,7 +83,7 @@ class UpdateDataViewModel @Inject constructor(
         _updatePengeluaranState.value = UpdatePengeluaranState(true)
         savedStateHandle.get<String>(Constant.PARAM_DATA)?.let {
             if(it.isNotBlank()){
-                val data = gson.fromJson(it, PengeluaranData::class.java)
+                val data = gson.fromJson(it, PemasukanData::class.java)
                 _updatePengeluaranState.value = UpdatePengeluaranState(data = data)
             }
         }
@@ -127,6 +126,54 @@ class UpdateDataViewModel @Inject constructor(
                                 }
                                 is Resource.Error -> {
                                     _updatePemasukanState.value = UpdatePemasukanState(message = it.message.toString())
+                                }
+                            }
+                        }
+                }
+            }
+        }
+    }
+    fun updatePengeluaran(data: TambahData, id: String) {
+        viewModelScope.launch {
+            _updatePengeluaranState.value = UpdatePengeluaranState(true)
+            dataStore.getData(stringPreferencesKey(R.string.TOKEN_KEY.toString())).collect{ token ->
+                if(token.isNotBlank()){
+                    putPengeluaranUseCase
+                        .invoke("Bearer $token", id,
+                            TambahData(
+                                bukti = "",
+                                distributorId = data.distributorId,
+                                keterangan = data.keterangan,
+                                tgl = data.tgl,
+                                totalHarga = data.totalHarga,
+                            )
+                        )
+                        .collect{
+                            when(it) {
+                                is Resource.Loading -> {
+                                    _updatePengeluaranState.value = UpdatePengeluaranState(
+                                        true
+                                    )
+                                }
+                                is Resource.Success -> {
+                                    _updatePengeluaranState.value = UpdatePengeluaranState(
+                                        data = PemasukanData(
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        distributorId = "",
+                                        ),
+                                        isSuccess = true
+                                    )
+                                }
+                                is Resource.Error -> {
+                                    _updatePengeluaranState.value = UpdatePengeluaranState(
+                                        message = it.message.toString()
+                                    )
                                 }
                             }
                         }

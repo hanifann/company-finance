@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.ebt.finance.R
 import com.ebt.finance.common.Constant
+import com.ebt.finance.features.admin.pemasukan.domain.models.PemasukanData
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.components.RowTextAndValueComponent
 import com.ebt.finance.features.admin.pengeluaran_detail.presentation.viewmodel.PengeluaranDetailViewModel
 import com.ebt.finance.ui.theme.Accent
@@ -244,7 +245,25 @@ fun PengeluaranDetailScreen(
             Spacer(modifier = Modifier.padding(vertical = 2.dp))
             if(userDataState.userData.roleId == "1"){
                 OutlinedButton(
-                    onClick = {  },
+                    onClick = {
+                        navController.navigate(
+                            "update_data/pengeluaran/${
+                                viewModel.paramToJson(
+                                    PemasukanData(
+                                        id = state.data.data[0].id,
+                                        buktiPemasukan = state.data.data[0].buktiPengeluaran!!,
+                                        distributorId = state.data.data[0].jenisPengeluaranID,
+                                        keterangan = state.data.data[0].keterangan,
+                                        namaDistributor = disState.jenisPengeluaran,
+                                        tgl = state.data.data[0].tgl,
+                                        totalPemasukan = state.data.data[0].totalPengeluaran,
+                                        updatedAt = state.data.data[0].updatedAt
+
+                                    )
+                                )
+                            }"
+                        )
+                    },
                     shape = RoundedCornerShape(8.dp),
                     border = BorderStroke(
                         1.dp,

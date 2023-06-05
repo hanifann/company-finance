@@ -96,11 +96,25 @@ fun UpdateDataScreen(
     val dialogState = rememberMaterialDialogState()
 
     var distributorId by remember {
-        mutableStateOf(updatePemasukanState.data!!.distributorId)
+        mutableStateOf("")
     }
 
     var errorDialogShow by remember { mutableStateOf(false) }
     var successDialogShow by remember { mutableStateOf(false) }
+
+    if(kategoriState.kategori == "pemasukan"){
+        dropDownValue = updatePemasukanState.data!!.namaDistributor
+        pemasukanTextFieldValue = TextFieldValue(updatePemasukanState.data.totalPemasukan)
+        tglTextFieldValue = TextFieldValue(updatePemasukanState.data.tgl)
+        keteranganDataTextFieldValue = TextFieldValue(updatePemasukanState.data.keterangan)
+        distributorId = updatePemasukanState.data.distributorId
+    } else {
+        dropDownValue = updatehPengeluaranState.data.namaDistributor
+        pemasukanTextFieldValue = TextFieldValue(updatehPengeluaranState.data.totalPemasukan)
+        tglTextFieldValue = TextFieldValue(updatehPengeluaranState.data.tgl)
+        keteranganDataTextFieldValue = TextFieldValue(updatehPengeluaranState.data.keterangan)
+        distributorId = updatehPengeluaranState.data.distributorId
+    }
 
 
 
@@ -259,7 +273,7 @@ fun UpdateDataScreen(
                                 )
                             } else {
                                 AsyncImage(
-                                    model = updatePemasukanState.data!!.buktiPemasukan,
+                                    model = "${Constant.BASE_URL}upload/pengeluaran/${updatehPengeluaranState.data.buktiPemasukan}",
                                     contentDescription = "bukti pemasukan",
                                     contentScale = ContentScale.FillBounds
                                 )
@@ -282,7 +296,16 @@ fun UpdateDataScreen(
                                 updatePemasukanState.data!!.id
                             )
                         } else {
-
+                            viewModel.updatePengeluaran(
+                                TambahData(
+                                    keterangan = keteranganDataTextFieldValue.text,
+                                    bukti = "",
+                                    distributorId = distributorId,
+                                    totalHarga = pemasukanTextFieldValue.text,
+                                    tgl = tglTextFieldValue.text
+                                ),
+                                updatehPengeluaranState.data.id
+                            )
 
                         }
                     },

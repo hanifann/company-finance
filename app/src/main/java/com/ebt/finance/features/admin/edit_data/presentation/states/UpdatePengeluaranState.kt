@@ -1,10 +1,10 @@
 package com.ebt.finance.features.admin.edit_data.presentation.states
 
-import com.ebt.finance.features.admin.pengeluaran.domain.models.PengeluaranData
+import com.ebt.finance.features.admin.pemasukan.domain.models.PemasukanData
 
 data class UpdatePengeluaranState(
     val isLoading: Boolean = false,
-    val data: PengeluaranData = PengeluaranData(
+    val data: PemasukanData = PemasukanData(
         "",
         "",
         "",
@@ -12,9 +12,7 @@ data class UpdatePengeluaranState(
         "",
         "",
         "",
-        "",
-        "",
-
+        distributorId = ""
     ),
     var message: String = "",
     var isSuccess: Boolean = false

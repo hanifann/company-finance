@@ -10,7 +10,8 @@ import javax.inject.Inject
 class UpdateDataRepositoryImpl @Inject constructor(
     private val remoteDataSource: UpdateDataRemoteDataSource
 ): UpdateDataRepository {
-    override suspend fun updatePemasukan(token: String, id: String, data: TambahData): Either<FailedDto, FailedDto> {
+    override suspend fun updatePemasukan(token: String, id: String, data: TambahData)
+    : Either<FailedDto, FailedDto> {
         return remoteDataSource.putPemasukan(
             token = token,
             id = id,
@@ -22,23 +23,16 @@ class UpdateDataRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun updatePengeluaran(
-        token: String,
-        id: String,
-        data: TambahData
-    ): Either<FailedDto, FailedDto> {
-        TODO("Not yet implemented")
+    override suspend fun updatePengeluaran(token: String, id: String, data: TambahData)
+    : Either<FailedDto, FailedDto> {
+        return remoteDataSource.putPengeluaran(
+            token = token,
+            id = id,
+            distributorId = data.distributorId,
+            keterangan = data.keterangan,
+            tgl = data.tgl,
+            totalPengeluaran = data.totalHarga,
+            jenisPengeluaran = ""
+        )
     }
-
-//    override suspend fun updatePengeluaran(token: String, id: String, data: TambahDataBody): Either<FailedDto, TambahPengeluaranDto> {
-//        return remoteDataSource.putPengeluaran(
-//            token = token,
-//            id = id,
-//            jenisPemasukan = data.jenisData,
-//            distributorId = data.distributorId,
-//            keterangan = data.keterangan,
-//            tgl = data.tgl,
-//            totalPengeluaran = data.totalHarga
-//        )
-//    }
 }
