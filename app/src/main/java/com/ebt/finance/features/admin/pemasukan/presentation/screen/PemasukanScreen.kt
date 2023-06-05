@@ -15,20 +15,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import com.ebt.finance.R
+import com.ebt.finance.common.OnLifecycleEvent
 import com.ebt.finance.features.admin.pemasukan.presentation.components.ContainerPemasukanComponent
-import com.ebt.finance.features.admin.pemasukan.presentation.state.GetPemasukanState
 import com.ebt.finance.features.admin.pemasukan.presentation.viewmodel.PemasukanViewModel
 import com.ebt.finance.ui.theme.Accent
 import com.ebt.finance.ui.theme.Primary
 
 @Composable
 fun PemasukanScreen(
-    viewModel: PemasukanViewModel,
+    viewModel: PemasukanViewModel = hiltViewModel(),
     navController: NavController,
-    state: GetPemasukanState
 ) {
+    val state = viewModel.state.value
+
+    OnLifecycleEvent{ _, event ->
+        when(event){
+            Lifecycle.Event.ON_START -> viewModel.getToken()
+            else -> {}
+        }
+    }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()

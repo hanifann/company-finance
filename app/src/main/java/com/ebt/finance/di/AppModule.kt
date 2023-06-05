@@ -53,22 +53,29 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    private  val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }).connectTimeout(Duration.ofSeconds(15))
+        .writeTimeout(Duration.ofSeconds(15))
+        .readTimeout(Duration.ofSeconds(15)).build()
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(Constant.BASE_URL)
+        .addConverterFactory(JacksonConverterFactory.create())
+        .addCallAdapterFactory(EitherCallAdapterFactory.create())
+        .client(okHttpClient)
+        .build()
+
+
+
+
     //login
     //datasource
     @Provides
     @Singleton
     fun provideLoginRemoteDataSourc(): LoginRemoteDataSource {
-        return Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    }).build()
-            )
-            .addConverterFactory(JacksonConverterFactory.create())
-            .addCallAdapterFactory(EitherCallAdapterFactory.create())
-            .build()
+        return retrofit
             .create(LoginRemoteDataSource::class.java)
     }
     //repository
@@ -84,17 +91,7 @@ object AppModule {
     @Provides
     @Singleton
     fun providePemasukanRemoteDataSource(): PemasukanRemoteDataSource {
-        return Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    }).build()
-            )
-            .addConverterFactory(JacksonConverterFactory.create())
-            .addCallAdapterFactory(EitherCallAdapterFactory.create())
-            .build()
+        return retrofit
             .create(PemasukanRemoteDataSource::class.java)
     }
     //repository
@@ -109,17 +106,7 @@ object AppModule {
     @Provides
     @Singleton
     fun providePemasukanDetailDataSource(): PemasukanDetailRemoteDataSource {
-        return Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    }).build()
-            )
-            .addConverterFactory(JacksonConverterFactory.create())
-            .addCallAdapterFactory(EitherCallAdapterFactory.create())
-            .build()
+        return retrofit
             .create(PemasukanDetailRemoteDataSource::class.java)
     }
     //repository
@@ -134,17 +121,7 @@ object AppModule {
     @Provides
     @Singleton
     fun providePengeluaranRemoteDataSource(): PengeluaranRemoteDataSource {
-        return Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    }).build()
-            )
-            .addConverterFactory(JacksonConverterFactory.create())
-            .addCallAdapterFactory(EitherCallAdapterFactory.create())
-            .build()
+        return retrofit
             .create(PengeluaranRemoteDataSource::class.java)
     }
     //repository
@@ -159,17 +136,7 @@ object AppModule {
     @Provides
     @Singleton
     fun providePengeluaranDetailRemoteDataSource(): PengeluaranDetailRemoteDataSource {
-        return Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    }).build()
-            )
-            .addConverterFactory(JacksonConverterFactory.create())
-            .addCallAdapterFactory(EitherCallAdapterFactory.create())
-            .build()
+        return retrofit
             .create(PengeluaranDetailRemoteDataSource::class.java)
     }
     //rpository
@@ -184,20 +151,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideTambahDataRemoteDataSource(): TambahDataRemoteDataSource {
-        return Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    })
-                    .connectTimeout(Duration.ofSeconds(15))
-                    .writeTimeout(Duration.ofSeconds(15))
-                    .readTimeout(Duration.ofSeconds(15)).build()
-            )
-            .addConverterFactory(JacksonConverterFactory.create())
-            .addCallAdapterFactory(EitherCallAdapterFactory.create())
-            .build()
+        return retrofit
             .create(TambahDataRemoteDataSource::class.java)
     }
     //repository
@@ -212,17 +166,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideUpdateDataRemoteDataSource(): UpdateDataRemoteDataSource {
-        return Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    }).build()
-            )
-            .addConverterFactory(JacksonConverterFactory.create())
-            .addCallAdapterFactory(EitherCallAdapterFactory.create())
-            .build()
+        return retrofit
             .create(UpdateDataRemoteDataSource::class.java)
     }
     //repository

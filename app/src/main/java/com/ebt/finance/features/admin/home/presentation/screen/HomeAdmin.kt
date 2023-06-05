@@ -39,11 +39,7 @@ import androidx.navigation.NavController
 import com.ebt.finance.R
 import com.ebt.finance.features.admin.home.presentation.viewModel.HomeAdminViewModel
 import com.ebt.finance.features.admin.pemasukan.presentation.screen.PemasukanScreen
-import com.ebt.finance.features.admin.pemasukan.presentation.state.GetPemasukanState
-import com.ebt.finance.features.admin.pemasukan.presentation.viewmodel.PemasukanViewModel
 import com.ebt.finance.features.admin.pengeluaran.presentation.screen.PengeluaranScreen
-import com.ebt.finance.features.admin.pengeluaran.presentation.state.PengeluaranState
-import com.ebt.finance.features.admin.pengeluaran.presentation.viewmodel.PengeluaranViewModel
 import com.ebt.finance.ui.theme.Accent
 import com.ebt.finance.ui.theme.Primary
 
@@ -52,10 +48,6 @@ import com.ebt.finance.ui.theme.Primary
 fun HomeAdmin(
     navController: NavController,
     viewModel: HomeAdminViewModel = hiltViewModel(),
-    pemasukanViewModel: PemasukanViewModel,
-    pengeluaranViewModel: PengeluaranViewModel,
-    pemasukanState: GetPemasukanState,
-    pengeluaranState: PengeluaranState
 ) {
     val userDataState = viewModel.userDataState.value
     var tabIndex by remember {
@@ -151,14 +143,10 @@ fun HomeAdmin(
             ){
                 when (tabIndex){
                     0 -> PemasukanScreen(
-                        viewModel = pemasukanViewModel,
                         navController = navController,
-                        state = pemasukanState
                     )
                     1 -> PengeluaranScreen(
                         navController,
-                        viewModel = pengeluaranViewModel,
-                        pengeluaranState = pengeluaranState,
                     )
                 }
             }

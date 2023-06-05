@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
                 .collect {
                     when(it) {
                         is Resource.Success -> {
-                            _state.value = LoginState(data = it.data)
+                            _state.value = LoginState(data = it.data, isSuccess = true)
                             saveToken(it.data!!.data)
                         }
                         is Resource.Error -> {

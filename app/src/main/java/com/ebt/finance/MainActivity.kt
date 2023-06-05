@@ -9,18 +9,16 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.ebt.finance.common.Constant
 import com.ebt.finance.features.admin.edit_data.presentation.screen.UpdateDataScreen
 import com.ebt.finance.features.admin.home.presentation.screen.HomeAdmin
-import com.ebt.finance.features.admin.pemasukan.presentation.viewmodel.PemasukanViewModel
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.screen.PemasukanDetailScreen
-import com.ebt.finance.features.admin.pengeluaran.presentation.viewmodel.PengeluaranViewModel
 import com.ebt.finance.features.admin.pengeluaran_detail.presentation.screen.PengeluaranDetailScreen
 import com.ebt.finance.features.admin.tambah_data.presentation.screen.TambahDataScreen
 import com.ebt.finance.features.auth.presentation.screens.AuthScreen
 import com.ebt.finance.features.image_viewer.presentation.screens.ImageViewerScreen
 import com.ebt.finance.features.login.presentation.screen.LoginScreen
+import com.ebt.finance.features.pegawai.presentation.screen.HomePegawaiScreen
 import com.ebt.finance.ui.theme.FinanceTheme
 import com.ebt.finance.ui.theme.Primary
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -41,8 +39,6 @@ class MainActivity : ComponentActivity() {
                     color = Primary
                 ) {
                     val navController = rememberAnimatedNavController()
-                    val pemasukanViewModel: PemasukanViewModel = hiltViewModel()
-                    val pengeluaranViewModel: PengeluaranViewModel = hiltViewModel()
                     AnimatedNavHost(
                         navController = navController,
                         startDestination = Route.AuthScreen.route,
@@ -66,10 +62,6 @@ class MainActivity : ComponentActivity() {
                         ){
                             HomeAdmin(
                                 navController = navController,
-                                pemasukanViewModel = pemasukanViewModel,
-                                pengeluaranViewModel = pengeluaranViewModel,
-                                pemasukanState = pemasukanViewModel.state.value,
-                                pengeluaranState = pengeluaranViewModel.state.value
                             )
                         }
                         composable(
@@ -92,8 +84,6 @@ class MainActivity : ComponentActivity() {
                         ) {
                             TambahDataScreen(
                                 navController = navController,
-                                pemasukanViewModel = pemasukanViewModel,
-                                pengeluaranViewModel = pengeluaranViewModel
                             )
                         }
                         composable(
@@ -101,9 +91,12 @@ class MainActivity : ComponentActivity() {
                         ){
                             UpdateDataScreen(
                                 navController = navController,
-                                pemasukanViewModel = pemasukanViewModel,
-                                pengeluaranViewModel = pengeluaranViewModel
                             )
+                        }
+                        composable(
+                            route = Route.HomePegawaiScreen.route
+                        ){
+                            HomePegawaiScreen(navController = navController)
                         }
                     }
                 }

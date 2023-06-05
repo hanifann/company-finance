@@ -12,6 +12,7 @@ fun AuthScreen(
 ) {
 
     val state = viewModel.state.value
+    val userDataState = viewModel.userDataState.value
 
     if(!state.isLoading){
         if(state.isSuccess == true){

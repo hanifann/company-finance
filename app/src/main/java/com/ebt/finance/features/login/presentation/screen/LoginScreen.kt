@@ -275,9 +275,10 @@ fun LoginScreen(
         )
     }
 
-    if (!state.data?.data.isNullOrBlank()){
+    if (state.isSuccess){
         userViewModel.getUserData("Bearer ${state.data!!.data}")
         "".also { state.data.data = it }
+        state.isSuccess = false
     }
 
     if (!userState.data?.name.isNullOrBlank()){

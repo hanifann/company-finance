@@ -26,10 +26,6 @@ class PemasukanViewModel @Inject constructor(
     private val _state = mutableStateOf(GetPemasukanState())
     val state: State<GetPemasukanState> = _state
 
-    init {
-        getToken()
-    }
-
     private fun getPemasukan(token: String) {
         viewModelScope.launch {
             useCase
