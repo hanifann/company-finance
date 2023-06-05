@@ -60,8 +60,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.ebt.finance.R
-import com.ebt.finance.features.admin.pemasukan.presentation.viewmodel.PemasukanViewModel
-import com.ebt.finance.features.admin.pengeluaran.presentation.viewmodel.PengeluaranViewModel
 import com.ebt.finance.features.admin.tambah_data.domain.model.TambahData
 import com.ebt.finance.features.admin.tambah_data.presentation.components.ColumnTitleAndTextField
 import com.ebt.finance.features.admin.tambah_data.presentation.components.ExposedDropdownMenuBoxComponent
@@ -87,8 +85,6 @@ import java.time.format.DateTimeFormatter
 fun TambahDataScreen(
     viewModel: TambahDataViewModel = hiltViewModel(),
     navController: NavController,
-    pemasukanViewModel: PemasukanViewModel,
-    pengeluaranViewModel: PengeluaranViewModel
 ) {
 
     val kategoriState = viewModel.kategoriState.value
@@ -486,7 +482,7 @@ fun TambahDataScreen(
     if(successDialogShow){
         AlertDialog(
             onDismissRequest = {
-                pemasukanViewModel.getToken()
+
             },
             title = {
                 Text(text = "Berhasil")
@@ -505,11 +501,6 @@ fun TambahDataScreen(
                             successDialogShow = false
                             tambahPemasukanState.isSuccess = false
                             tambahPengeluaranState.isSuccess = false
-                            if(kategoriState.kategori == "pemasukan"){
-                                pemasukanViewModel.getToken()
-                            } else {
-                                pengeluaranViewModel.getToken()
-                            }
                         }
                 )
             }
