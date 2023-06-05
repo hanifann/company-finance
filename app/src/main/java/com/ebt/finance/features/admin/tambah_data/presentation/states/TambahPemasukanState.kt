@@ -11,7 +11,6 @@ data class TambahPemasukanState(
         "",
         "",
         "",
-        ""
     )),
     var message: String = "",
     var isSuccess: Boolean = false

@@ -103,7 +103,6 @@ class UpdateDataViewModel @Inject constructor(
                                 keterangan = data.keterangan,
                                 tgl = data.tgl,
                                 totalHarga = data.totalHarga,
-                                kategori = data.keterangan
                             )
                         )
                         .collect{

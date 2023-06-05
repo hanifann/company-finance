@@ -23,7 +23,6 @@ class TambahDataRepositoryImpl @Inject constructor(
     ): Either<FailedDto, TambahPemasukaDto> {
         return datasource.postPemasukan(
             token = token,
-            jenisPemasukan = data.jenisData,
             keterangan = data.keterangan,
             totalPemasukan = data.totalHarga,
             tgl = data.tgl,
@@ -38,7 +37,6 @@ class TambahDataRepositoryImpl @Inject constructor(
     ): Either<FailedDto, TambahPengeluaranDto> {
         return datasource.postPengeluaran(
             token = token,
-            jenisPemasukan = data.jenisData,
             keterangan = data.keterangan,
             totalPengeluaran = data.totalHarga,
             tgl = data.tgl,

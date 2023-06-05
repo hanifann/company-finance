@@ -100,8 +100,6 @@ class TambahDataViewModel @Inject constructor(
             dataStore.getData(stringPreferencesKey(R.string.TOKEN_KEY.toString())).collect{ token ->
 
                 val requestImage = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-                val jenisPemasukan =
-                    data.kategori.toRequestBody("multipart/form-data".toMediaTypeOrNull())
                 val keterangan =
                     data.keterangan.toRequestBody("multipart/form-data".toMediaTypeOrNull())
                 val tgl = data.tgl.toRequestBody("multipart/form-data".toMediaTypeOrNull())
@@ -116,7 +114,6 @@ class TambahDataViewModel @Inject constructor(
                         .invoke("Bearer $token", TambahDataBody(
                             bukti = buktiPemasukan,
                             distributorId = distributorId,
-                            jenisData = jenisPemasukan,
                             keterangan = keterangan,
                             tgl = tgl,
                             totalHarga = totalPemasukan
@@ -147,8 +144,6 @@ class TambahDataViewModel @Inject constructor(
             dataStore.getData(stringPreferencesKey(R.string.TOKEN_KEY.toString())).collect{ token ->
 
                 val requestImage = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-                val jenisPemasukan =
-                    data.kategori.toRequestBody("multipart/form-data".toMediaTypeOrNull())
                 val keterangan =
                     data.keterangan.toRequestBody("multipart/form-data".toMediaTypeOrNull())
                 val tgl = data.tgl.toRequestBody("multipart/form-data".toMediaTypeOrNull())
@@ -163,7 +158,6 @@ class TambahDataViewModel @Inject constructor(
                         .invoke("Bearer $token", TambahDataBody(
                             bukti = buktiPemasukan,
                             distributorId = distributorId,
-                            jenisData = jenisPemasukan,
                             keterangan = keterangan,
                             tgl = tgl,
                             totalHarga = totalPemasukan

@@ -6,7 +6,6 @@ data class TambahData(
     val totalHarga: String,
     val bukti: String,
     val distributorId: String,
-    val kategori: String
 )
 
 data class Tambah(

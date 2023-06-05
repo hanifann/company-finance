@@ -31,5 +31,4 @@ fun TambahPengeluaranDataDto.toPengeluaranData(): TambahData = TambahData(
     totalPengeluaran,
     buktiPengeluaran,
     jenisPengeluaranId,
-    keterangan
 )

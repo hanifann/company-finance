@@ -24,7 +24,6 @@ interface TambahDataRemoteDataSource {
     @POST("/api/tambah_pemasukan")
     @Multipart
     suspend fun postPemasukan(
-        @Part("jenis_pemasukan") jenisPemasukan: RequestBody,
         @Part("keterangan") keterangan: RequestBody,
         @Part("tgl") tgl: RequestBody,
         @Part("total_pemasukan") totalPemasukan: RequestBody,
@@ -37,7 +36,6 @@ interface TambahDataRemoteDataSource {
     @POST("/api/tambah_pengeluaran")
     @Multipart
     suspend fun postPengeluaran(
-        @Part("jenis_pengeluaran") jenisPemasukan: RequestBody,
         @Part("keterangan") keterangan: RequestBody,
         @Part("tgl") tgl: RequestBody,
         @Part("total_pengeluaran") totalPengeluaran: RequestBody,

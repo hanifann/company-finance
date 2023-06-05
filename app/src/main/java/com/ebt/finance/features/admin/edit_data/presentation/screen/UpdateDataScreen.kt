@@ -281,7 +281,6 @@ fun UpdateDataScreen(
                                     bukti = "",
                                     distributorId = distributorId,
                                     totalHarga = pemasukanTextFieldValue.text,
-                                    kategori = "",
                                     tgl = tglTextFieldValue.text
                                 ),
                                 updatePemasukanState.data!!.id

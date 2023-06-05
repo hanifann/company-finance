@@ -106,9 +106,6 @@ fun TambahDataScreen(
     var tglTextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     val tglInteractionSource = remember { MutableInteractionSource() }
 
-    var jenisDataTextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
-    val jenisDataInteractionSource = remember { MutableInteractionSource() }
-
     var keteranganDataTextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     val keteranganDataInteractionSource = remember { MutableInteractionSource() }
 
@@ -192,21 +189,6 @@ fun TambahDataScreen(
                     .verticalScroll(rememberScrollState())
                     .padding(vertical = it.calculateTopPadding() + 16.dp, horizontal = 16.dp)
             ) {
-                ColumnTitleAndTextField(
-                    title = "Jenis ${kategoriState.kategori}",
-                    textField = {
-                        CustomTextFieldComponent(
-                            textFieldValue = jenisDataTextFieldValue,
-                            onValueChange = { value ->
-                                jenisDataTextFieldValue = value
-                            },
-                            interactionSource = jenisDataInteractionSource,
-                            placeholder = "Jenis ${kategoriState.kategori}",
-                            keyboardType = KeyboardType.Text
-                        )
-                    }
-                )
-                Spacer(modifier = Modifier.padding(vertical = 16.dp))
                 ColumnTitleAndTextField(
                     title = "Total ${kategoriState.kategori}",
                     textField = {
@@ -374,10 +356,9 @@ fun TambahDataScreen(
                         if(kategoriState.kategori == "pemasukan") {
                             viewModel.tambahPemasukan(
                                 TambahData(
-                                    keterangan = jenisDataTextFieldValue.text,
+                                    keterangan = keteranganDataTextFieldValue.text,
                                     bukti ="",
                                     distributorId = distributorId,
-                                    kategori = keteranganDataTextFieldValue.text,
                                     tgl = tglTextFieldValue.text,
                                     totalHarga = pemasukanTextFieldValue.text
                                 ),
@@ -386,10 +367,9 @@ fun TambahDataScreen(
                         } else {
                             viewModel.tambahPengeluaran(
                                 TambahData(
-                                    keterangan = jenisDataTextFieldValue.text,
+                                    keterangan = keteranganDataTextFieldValue.text,
                                     bukti ="",
                                     distributorId = distributorId,
-                                    kategori = keteranganDataTextFieldValue.text,
                                     tgl = tglTextFieldValue.text,
                                     totalHarga = pemasukanTextFieldValue.text
                                 ),

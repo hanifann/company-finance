@@ -12,7 +12,6 @@ data class TambahPengeluaranState(
         "",
         "",
         "",
-        ""
     )
     ),
     var message: String = "",

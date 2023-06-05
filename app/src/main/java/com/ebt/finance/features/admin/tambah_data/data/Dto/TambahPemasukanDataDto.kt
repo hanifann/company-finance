@@ -31,5 +31,4 @@ fun TambahPemasukanData.toTambahData(): TambahData = TambahData(
     totalPemasukan,
     buktiPemasukan,
     distributorId,
-    keterangan
 )
