@@ -18,7 +18,6 @@ import com.ebt.finance.features.admin.tambah_data.presentation.screen.TambahData
 import com.ebt.finance.features.auth.presentation.screens.AuthScreen
 import com.ebt.finance.features.image_viewer.presentation.screens.ImageViewerScreen
 import com.ebt.finance.features.login.presentation.screen.LoginScreen
-import com.ebt.finance.features.pegawai.presentation.screen.HomePegawaiScreen
 import com.ebt.finance.ui.theme.FinanceTheme
 import com.ebt.finance.ui.theme.Primary
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -92,11 +91,6 @@ class MainActivity : ComponentActivity() {
                             UpdateDataScreen(
                                 navController = navController,
                             )
-                        }
-                        composable(
-                            route = Route.HomePegawaiScreen.route
-                        ){
-                            HomePegawaiScreen(navController = navController)
                         }
                     }
                 }
