@@ -15,7 +15,11 @@ import androidx.compose.ui.text.style.TextOverflow
 fun RowTextAndValueComponent(
     title: String,
     value: String,
-    modifier: Modifier
+    modifier: Modifier,
+    titleColor: Color = Color(red = 180, green = 180, blue = 180),
+    subtitleColor: Color = Color.Black,
+    titleFontWeight: FontWeight = FontWeight(300),
+    subtitleFontWeight: FontWeight = FontWeight(500)
 ) {
     Row(
         modifier = modifier
@@ -24,21 +28,22 @@ fun RowTextAndValueComponent(
     ) {
         Text(
             text = title,
-            fontWeight = FontWeight(300),
+            fontWeight = titleFontWeight,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            color = Color(red = 180, green = 180, blue = 180),
+            color = titleColor,
             modifier = Modifier
                 .weight(.5f)
         )
         Text(
             text = value,
             overflow = TextOverflow.Ellipsis,
-            fontWeight = FontWeight(500),
+            fontWeight = subtitleFontWeight,
             maxLines = 1,
             textAlign = TextAlign.End,
             modifier = Modifier
-                .weight(.5f)
+                .weight(.5f),
+            color = subtitleColor
         )
     }
 }
