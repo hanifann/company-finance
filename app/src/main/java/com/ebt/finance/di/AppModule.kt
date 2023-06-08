@@ -32,6 +32,12 @@ import com.ebt.finance.features.admin.tambah_data.domain.repositories.TambahData
 import com.ebt.finance.features.login.data.datasources.LoginRemoteDataSource
 import com.ebt.finance.features.login.data.repositories.LoginRepositoryImp
 import com.ebt.finance.features.login.domain.repositories.LoginRepository
+import com.ebt.finance.features.pegawai.gaji.data.datasources.GajiRemoteDataSource
+import com.ebt.finance.features.pegawai.gaji.data.repositories.GajiRepositoryImpl
+import com.ebt.finance.features.pegawai.gaji.domain.repositories.GajiRepository
+import com.ebt.finance.features.pegawai.gaji_detail.data.datasource.GajiDetailRemoteDataSource
+import com.ebt.finance.features.pegawai.gaji_detail.data.repositories.GajiDetailRepositoryImpl
+import com.ebt.finance.features.pegawai.gaji_detail.domain.repositories.GajiDetailRepository
 import com.google.gson.Gson
 import dagger.Binds
 import dagger.Module
@@ -44,6 +50,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import retrofit2.create
 import java.text.NumberFormat
 import java.time.Duration
 import javax.inject.Singleton
@@ -66,8 +73,6 @@ object AppModule {
         .addCallAdapterFactory(EitherCallAdapterFactory.create())
         .client(okHttpClient)
         .build()
-
-
 
 
     //login
@@ -174,6 +179,35 @@ object AppModule {
     @Singleton
     fun provideUpdateDataRepository(dataSource: UpdateDataRemoteDataSource): UpdateDataRepository {
         return UpdateDataRepositoryImpl(dataSource)
+    }
+
+    //gaji_karyawan
+    //datasource
+    @Provides
+    @Singleton
+    fun provideGajiRemoteDataSource(): GajiRemoteDataSource {
+        return retrofit
+            .create(GajiRemoteDataSource::class.java)
+    }
+    //repository
+    @Provides
+    @Singleton
+    fun provideGajiRepository(datasource: GajiRemoteDataSource): GajiRepository {
+        return GajiRepositoryImpl(datasource)
+    }
+
+    //detail_gaji
+    //datasource
+    @Provides
+    @Singleton
+    fun provideGajiDetailRemoteDataSource(): GajiDetailRemoteDataSource {
+        return retrofit.create(GajiDetailRemoteDataSource::class.java)
+    }
+    //rpository
+    @Provides
+    @Singleton
+    fun provideGajiDetailRepository(dataSource: GajiDetailRemoteDataSource): GajiDetailRepository {
+        return GajiDetailRepositoryImpl(dataSource)
     }
 
 
