@@ -9,4 +9,5 @@ object Constant {
     const val PARAM_IMG_URL = "imgUrl"
     const val PARAM_KATEGORI = "kategori"
     const val PARAM_DATA = "data"
+    const val PARAM_GAJI_ID = "gajiId"
 }
