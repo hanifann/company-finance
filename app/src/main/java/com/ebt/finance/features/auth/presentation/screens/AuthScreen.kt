@@ -13,11 +13,29 @@ fun AuthScreen(
 
     val state = viewModel.state.value
     val userDataState = viewModel.userDataState.value
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize(),
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        verticalArrangement = Arrangement.Center
+//    ) {
+//        CircularProgressIndicator(
+//            color = Accent
+//        )
+//    }
 
     if(!state.isLoading){
         if(state.isSuccess == true){
-            navController.navigate("home_admin"){
-                popUpTo(0)
+            if(userDataState.userData.roleId.isNotBlank()){
+                if(userDataState.userData.roleId != "2"){
+                    navController.navigate("home_admin"){
+                        popUpTo(0)
+                    }
+                } else {
+                    navController.navigate("home_pegawai"){
+                        popUpTo(0)
+                    }
+                }
             }
         } else {
             navController.navigate("login_screen"){
