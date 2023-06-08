@@ -296,26 +296,6 @@ fun PemasukanDetailScreen(
                         .padding(horizontal = 16.dp)
                 )
             }
-            Spacer(modifier = Modifier.padding(vertical = 2.dp))
-            ElevatedButton(
-                onClick = {
-                    navController.navigateUp()
-                },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.elevatedButtonColors(
-                    containerColor = Accent
-                ),
-                content = {
-                    Text(
-                        text = "Kembali",
-                        color = Color.White,
-                        fontWeight = FontWeight(500)
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            )
         }
     }
 
