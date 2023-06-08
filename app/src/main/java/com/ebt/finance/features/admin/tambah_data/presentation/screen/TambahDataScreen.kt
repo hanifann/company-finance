@@ -501,6 +501,9 @@ fun TambahDataScreen(
                             successDialogShow = false
                             tambahPemasukanState.isSuccess = false
                             tambahPengeluaranState.isSuccess = false
+                            navController.navigate("auth_screen"){
+                                popUpTo(0)
+                            }
                         }
                 )
             }
