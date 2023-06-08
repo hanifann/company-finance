@@ -18,6 +18,8 @@ import com.ebt.finance.features.admin.tambah_data.presentation.screen.TambahData
 import com.ebt.finance.features.auth.presentation.screens.AuthScreen
 import com.ebt.finance.features.image_viewer.presentation.screens.ImageViewerScreen
 import com.ebt.finance.features.login.presentation.screen.LoginScreen
+import com.ebt.finance.features.pegawai.gaji.presentation.screen.HomePegawaiScreen
+import com.ebt.finance.features.pegawai.gaji_detail.presentaion.screen.GajiDetailScreen
 import com.ebt.finance.ui.theme.FinanceTheme
 import com.ebt.finance.ui.theme.Primary
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -89,6 +91,18 @@ class MainActivity : ComponentActivity() {
                             route = Route.UpdateDataScreen.route + "/{${Constant.PARAM_KATEGORI}}/{${Constant.PARAM_DATA}}"
                         ){
                             UpdateDataScreen(
+                                navController = navController,
+                            )
+                        }
+                        composable(
+                            route = Route.HomePegawaiScreen.route
+                        ){
+                            HomePegawaiScreen(navController = navController)
+                        }
+                        composable(
+                            route = Route.GajiDetailScreen.route + "/{${Constant.PARAM_GAJI_ID}}"
+                        ){
+                            GajiDetailScreen(
                                 navController = navController,
                             )
                         }
