@@ -88,13 +88,6 @@ fun GajiDetailScreen(
     val view = LocalView.current
     val handler = Handler(Looper.getMainLooper())
 
-    fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
-        outputStream().use { out ->
-            bitmap.compress(format, quality, out)
-            out.flush()
-        }
-    }
-
     OnLifecycleEvent{ _, event ->
         when(event){
             Lifecycle.Event.ON_START -> viewModel.getDetailGaji()
@@ -313,7 +306,13 @@ fun GajiDetailScreen(
                                     Bitmap.Config.ARGB_8888).applyCanvas {
                                     view.draw(this)
                                 }
-                                generatePDF(context, bmp, view.height, view.width)
+                                generatePDF(
+                                    context,
+                                    bmp,
+                                    view.height,
+                                    view.width,
+                                    "${gajiDetailState.gaji.data[0].name}_${gajiDetailState.gaji.data[0].bulan}"
+                                )
 
 
                             }, 1000)
@@ -384,7 +383,7 @@ fun MultiStyleText(text1: String, color1: Color, text2: String, color2: Color, t
     })
 }
 
-fun generatePDF(context: Context, bmp: Bitmap, height: Int, width: Int) {
+fun generatePDF(context: Context, bmp: Bitmap, height: Int, width: Int, name: String) {
 
     // declaring width and height
     // for our PDF file.
@@ -399,9 +398,7 @@ fun generatePDF(context: Context, bmp: Bitmap, height: Int, width: Int) {
     // two variables for paint "paint" is used
     // for drawing shapes and we will use "title"
     // for adding text in our PDF file.
-    var paint: Paint = Paint()
-    var title: Paint = Paint()
-
+    val paint: Paint = Paint()
     // on below line we are initializing our bitmap and scaled bitmap.
 
 
@@ -410,16 +407,16 @@ fun generatePDF(context: Context, bmp: Bitmap, height: Int, width: Int) {
     // in which we will be passing our pageWidth,
     // pageHeight and number of pages and after that
     // we are calling it to create our PDF.
-    var myPageInfo: PdfDocument.PageInfo? =
+    val myPageInfo: PdfDocument.PageInfo? =
         PdfDocument.PageInfo.Builder(width, height, 1).create()
 
     // below line is used for setting
     // start page for our PDF file.
-    var myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
+    val myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
 
     // creating a variable for canvas
     // from our page of PDF.
-    var canvas: Canvas = myPage.canvas
+    val canvas: Canvas = myPage.canvas
 
     canvas.drawBitmap(bmp, 0f,0f, paint)
 
@@ -430,7 +427,7 @@ fun generatePDF(context: Context, bmp: Bitmap, height: Int, width: Int) {
     // below line is used to set the name of
     // our PDF file and its path.
     val path: File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-    val file = File(path, "asdf.pdf")
+    val file = File(path, "$name.pdf")
 
     try {
         // after creating a file name we will
