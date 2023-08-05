@@ -9,6 +9,7 @@ import com.ebt.finance.R
 import com.ebt.finance.common.DataStoreRepository
 import com.ebt.finance.common.Resource
 import com.ebt.finance.features.login.domain.models.UserData
+import com.ebt.finance.features.pegawai.gaji.domain.models.GajiData
 import com.ebt.finance.features.pegawai.gaji.domain.use_case.GetListGajiUseCase
 import com.ebt.finance.features.pegawai.gaji.presentation.state.GajiState
 import com.google.gson.Gson
@@ -75,5 +76,9 @@ class GajiViewModel @Inject constructor(
         formatter.maximumFractionDigits = 0
         formatter.currency = Currency.getInstance("IDR")
         return formatter.format(value)
+    }
+
+    fun toJson(gaji: GajiData): String {
+        return gson.toJson(gaji)
     }
 }
