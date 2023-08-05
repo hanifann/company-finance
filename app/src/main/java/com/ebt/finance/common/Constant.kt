@@ -10,4 +10,5 @@ object Constant {
     const val PARAM_KATEGORI = "kategori"
     const val PARAM_DATA = "data"
     const val PARAM_GAJI_ID = "gajiId"
+    const val PARAM_GAJI = "gaji"
 }
