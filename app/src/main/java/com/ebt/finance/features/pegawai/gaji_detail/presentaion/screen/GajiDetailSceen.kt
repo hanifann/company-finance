@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -54,9 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.applyCanvas
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
-import com.ebt.finance.common.OnLifecycleEvent
 import com.ebt.finance.features.admin.pemasukan_detail.presentation.components.RowTextAndValueComponent
 import com.ebt.finance.features.pegawai.gaji.presentation.viewmodel.GajiViewModel
 import com.ebt.finance.features.pegawai.gaji_detail.presentaion.viewmodel.GajiDetailViewModel
@@ -88,12 +85,12 @@ fun GajiDetailScreen(
     val view = LocalView.current
     val handler = Handler(Looper.getMainLooper())
 
-    OnLifecycleEvent{ _, event ->
-        when(event){
-            Lifecycle.Event.ON_START -> viewModel.getDetailGaji()
-            else -> {}
-        }
-    }
+//    OnLifecycleEvent{ _, event ->
+//        when(event){
+//            Lifecycle.Event.ON_START -> viewModel.getDetailGaji()
+//            else -> {}
+//        }
+//    }
 
     Scaffold(
         containerColor = Primary,
@@ -143,14 +140,15 @@ fun GajiDetailScreen(
                         shape = RoundedCornerShape(8.dp)
                     )
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    items(gajiDetailState.gaji.data.size){
+                if(gajiDetailState.gaji.id.isNotEmpty()){
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
                         Spacer(modifier = Modifier.padding(top = 70.dp))
-                        SimpleDateFormat("yyyy-MM", Locale("id")).parse(gajiDetailState.gaji.data[0].bulan)?.let { date ->
+                        SimpleDateFormat("yyyy-MM", Locale("id")).parse(gajiDetailState.gaji.bulan)?.let { date ->
                             SimpleDateFormat("MMMM yyyy", Locale("id")).format(date)
                         }?.let { it1 ->
                             MultiStyleText(
@@ -164,7 +162,7 @@ fun GajiDetailScreen(
                         }
                         Text(
                             text = gajiViewModel.formatCurrenty(
-                                gajiDetailState.gaji.data[0].total.toDouble()
+                                gajiDetailState.gaji.total.toDouble()
                             ),
                             fontSize = 32.sp,
                             fontWeight = FontWeight(600)
@@ -176,7 +174,7 @@ fun GajiDetailScreen(
                         RowTextAndValueComponent(
                             title = "Total Gaji",
                             value = gajiViewModel.formatCurrenty(
-                                gajiDetailState.gaji.data[0].total.toDouble()
+                                gajiDetailState.gaji.total.toDouble()
                             ),
                             modifier = Modifier
                                 .padding(
@@ -208,7 +206,7 @@ fun GajiDetailScreen(
                                 RowTextAndValueComponent(
                                     title = "Gaji pokok",
                                     value = gajiViewModel.formatCurrenty(
-                                        gajiDetailState.gaji.data[0].gapok.toDouble()
+                                        gajiDetailState.gaji.gapok.toDouble()
                                     ),
                                     modifier = Modifier
                                         .padding(start = 16.dp),
@@ -220,7 +218,7 @@ fun GajiDetailScreen(
                                 RowTextAndValueComponent(
                                     title = "Tunjangan",
                                     value = gajiViewModel.formatCurrenty(
-                                        gajiDetailState.gaji.data[0].tunjangan.toDouble()
+                                        gajiDetailState.gaji.tunjangan.toDouble()
                                     ),
                                     modifier = Modifier
                                         .padding(start = 16.dp),
@@ -232,7 +230,7 @@ fun GajiDetailScreen(
                                 RowTextAndValueComponent(
                                     title = "Makan dan transport",
                                     value = gajiViewModel.formatCurrenty(
-                                        gajiDetailState.gaji.data[0].makanTransport.toDouble()
+                                        gajiDetailState.gaji.makanTransport.toDouble()
                                     ),
                                     modifier = Modifier
                                         .padding(start = 16.dp),
@@ -244,7 +242,7 @@ fun GajiDetailScreen(
                                 RowTextAndValueComponent(
                                     title = "Lembur",
                                     value = gajiViewModel.formatCurrenty(
-                                        gajiDetailState.gaji.data[0].lembur.toDouble()
+                                        gajiDetailState.gaji.lembur.toDouble()
                                     ),
                                     modifier = Modifier
                                         .padding(start = 16.dp),
@@ -256,7 +254,7 @@ fun GajiDetailScreen(
                                 RowTextAndValueComponent(
                                     title = "Insentif",
                                     value = gajiViewModel.formatCurrenty(
-                                        gajiDetailState.gaji.data[0].insentiv.toDouble()
+                                        gajiDetailState.gaji.insentiv.toDouble()
                                     ),
                                     modifier = Modifier
                                         .padding(start = 16.dp),
@@ -268,7 +266,7 @@ fun GajiDetailScreen(
                                 RowTextAndValueComponent(
                                     title = "Jaminan kesehatan",
                                     value = gajiViewModel.formatCurrenty(
-                                        gajiDetailState.gaji.data[0].jamkes.toDouble()
+                                        gajiDetailState.gaji.jamkes.toDouble()
                                     ),
                                     modifier = Modifier
                                         .padding(start = 16.dp),
@@ -280,7 +278,7 @@ fun GajiDetailScreen(
                                 RowTextAndValueComponent(
                                     title = "Pinjaman",
                                     value = gajiViewModel.formatCurrenty(
-                                        gajiDetailState.gaji.data[0].pinjaman.toDouble()
+                                        gajiDetailState.gaji.pinjaman.toDouble()
                                     ),
                                     modifier = Modifier
                                         .padding(start = 16.dp),
@@ -311,7 +309,7 @@ fun GajiDetailScreen(
                                     bmp,
                                     view.height,
                                     view.width,
-                                    "${gajiDetailState.gaji.data[0].name}_${gajiDetailState.gaji.data[0].bulan}"
+                                    "${gajiDetailState.gaji.name}_${gajiDetailState.gaji.bulan}"
                                 )
 
 
@@ -333,8 +331,8 @@ fun GajiDetailScreen(
                         color = Color.White
                     )
                 }
+                }
             }
-        }
 
         if(gajiDetailState.isLoading) {
             Column(
