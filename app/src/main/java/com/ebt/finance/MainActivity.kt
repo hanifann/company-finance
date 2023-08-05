@@ -100,7 +100,7 @@ class MainActivity : ComponentActivity() {
                             HomePegawaiScreen(navController = navController)
                         }
                         composable(
-                            route = Route.GajiDetailScreen.route + "/{${Constant.PARAM_GAJI_ID}}"
+                            route = Route.GajiDetailScreen.route + "/{${Constant.PARAM_GAJI}}"
                         ){
                             GajiDetailScreen(
                                 navController = navController,
