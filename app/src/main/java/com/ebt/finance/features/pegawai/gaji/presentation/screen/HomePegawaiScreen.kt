@@ -99,7 +99,13 @@ fun HomePegawaiScreen(
                     ContainerDataGaji(
                         data = gajiState.gaji.data[index],
                         onTap = {
-                            navController.navigate("gaji_detail/${gajiState.gaji.data[index].id}")
+                            navController.navigate(
+                                "gaji_detail/${
+                                    viewModel.toJson(
+                                        gajiState.gaji.data[index]
+                                    )
+                                }"
+                            )
                         },
                         viewModel
                     )
