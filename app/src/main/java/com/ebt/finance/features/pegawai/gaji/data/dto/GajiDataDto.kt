@@ -22,7 +22,7 @@ data class GajiDatadto(
     @JsonProperty("name")
     val name: String,
     @JsonProperty("pinjaman")
-    val pinjaman: String,
+    val pinjaman: String?,
     @JsonProperty("total")
     val total: String,
     @JsonProperty("tunjangan")

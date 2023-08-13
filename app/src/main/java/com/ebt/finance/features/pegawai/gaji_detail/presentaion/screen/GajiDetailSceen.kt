@@ -275,18 +275,18 @@ fun GajiDetailScreen(
                                     titleFontWeight = FontWeight.Bold,
                                     subtitleFontWeight = FontWeight.Bold
                                 )
-                                RowTextAndValueComponent(
-                                    title = "Pinjaman",
-                                    value = gajiViewModel.formatCurrenty(
-                                        gajiDetailState.gaji.pinjaman.toDouble()
-                                    ),
-                                    modifier = Modifier
-                                        .padding(start = 16.dp),
-                                    titleColor = Color(110,108,125),
-                                    subtitleColor = Color(110,108,125),
-                                    titleFontWeight = FontWeight.Bold,
-                                    subtitleFontWeight = FontWeight.Bold
-                                )
+//                                RowTextAndValueComponent(
+//                                    title = "Pinjaman",
+//                                    value = gajiViewModel.formatCurrenty(
+//                                        gajiDetailState.gaji.pinjaman.toDouble()
+//                                    ),
+//                                    modifier = Modifier
+//                                        .padding(start = 16.dp),
+//                                    titleColor = Color(110,108,125),
+//                                    subtitleColor = Color(110,108,125),
+//                                    titleFontWeight = FontWeight.Bold,
+//                                    subtitleFontWeight = FontWeight.Bold
+//                                )
                             }
                         }
                         Spacer(modifier = Modifier.padding(top = 16.dp))

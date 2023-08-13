@@ -12,7 +12,7 @@ data class GajiData (
     val lembur: String,
     val tunjangan: String,
     val insentiv: String,
-    val pinjaman: String,
+    val pinjaman: String?,
     val jamkes: String,
     val name: String,
     val total: String
