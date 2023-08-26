@@ -151,7 +151,7 @@ fun PemasukanScreen(
                         .padding(vertical = 16.dp)
                 ) {
                     ContainerTotalPemasukanComponent(
-                        title = "Total pemasukan",
+                        title = "Jumlah pemasukan",
                         total = viewModel.formatCurrenty(totalState.data.data[0].jumlah_pemasukan.toDouble()),
                     )
                 }
