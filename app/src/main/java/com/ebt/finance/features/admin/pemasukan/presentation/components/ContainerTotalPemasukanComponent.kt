@@ -29,6 +29,7 @@ import com.ebt.finance.ui.theme.Secondary
 fun ContainerTotalPemasukanComponent(
     title: String,
     total: String,
+    isPemasukan: Boolean = true
 ) {
     Box(
         modifier = Modifier
@@ -49,7 +50,7 @@ fun ContainerTotalPemasukanComponent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.income),
+                painter = if (isPemasukan) painterResource(id = R.drawable.income) else painterResource(id = R.drawable.expanse),
                 contentDescription = "income icon",
                 tint = Accent,
                 modifier = Modifier
